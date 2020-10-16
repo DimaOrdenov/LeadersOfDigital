@@ -14,5 +14,6 @@ namespace Api.Data
         }
         public DbSet<Facility> Facilities { get; set; }
         public DbSet<Barrier> Barriers { get; set; }
+        public DbSet<Api.Data.Models.Disability> Disability { get; set; }
     }
 }
