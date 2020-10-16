@@ -406,3 +406,10 @@ ASALocalRun/
 /Api/secrets.json
 /Api/Api.xml
 /Api/aws-beanstalk-tools-defaults.json
+
+
+secrets.json
+secrets.*.json
+
+# mono
+mono_crash.*

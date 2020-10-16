@@ -1,6 +1,8 @@
-﻿using System;
+﻿using Autofac;
+using LeadersOfDigital.Containers;
+using LeadersOfDigital.Views;
+using NoTryCatch.Xamarin.Portable.Services;
 using Xamarin.Forms;
-using Xamarin.Forms.Xaml;
 
 namespace LeadersOfDigital
 {
@@ -10,11 +12,14 @@ namespace LeadersOfDigital
         {
             InitializeComponent();
 
-            MainPage = new MainPage();
+            MainPage = new ContentPage();
         }
 
         protected override void OnStart()
         {
+            INavigationService navigationService = IocContainer.Container.Resolve<INavigationService>();
+
+            navigationService.SetRootPage<MainPage>();
         }
 
         protected override void OnSleep()

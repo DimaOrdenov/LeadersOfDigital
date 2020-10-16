@@ -1,5 +1,48 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Application xmlns="http://xamarin.com/schemas/2014/forms" xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" x:Class="LeadersOfDigital.App">
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Application xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:local="clr-namespace:LeadersOfDigital"
+             x:Class="LeadersOfDigital.App">
+
     <Application.Resources>
+        <ResourceDictionary>
+            <Style TargetType="Frame"
+                   ApplyToDerivedTypes="True">
+                <Setter Property="IsClippedToBounds"
+                        Value="True" />
+                <Setter Property="HasShadow"
+                        Value="False" />
+                <Setter Property="Padding"
+                        Value="0" />
+                <Setter Property="CornerRadius"
+                        Value="0" />
+                <Setter Property="BackgroundColor"
+                        Value="Transparent" />
+            </Style>
+            <Style TargetType="Grid"
+                   ApplyToDerivedTypes="True">
+                <Setter Property="ColumnSpacing"
+                        Value="0" />
+                <Setter Property="RowSpacing"
+                        Value="0" />
+            </Style>
+            <Style TargetType="StackLayout"
+                   ApplyToDerivedTypes="True">
+                <Setter Property="Spacing"
+                        Value="0" />
+            </Style>
+            <Style TargetType="Label"
+                   ApplyToDerivedTypes="True">
+                <Setter Property="TextColor"
+                        Value="{x:Static local:AppColors.Secondary}" />
+            </Style>
+            <Style TargetType="Editor"
+                   ApplyToDerivedTypes="True" />
+            <Style TargetType="Entry"
+                   ApplyToDerivedTypes="True" />
+            <Style TargetType="Button"
+                   ApplyToDerivedTypes="True" />
+        </ResourceDictionary>
     </Application.Resources>
+
 </Application>
