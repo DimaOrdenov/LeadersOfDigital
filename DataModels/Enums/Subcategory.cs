@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel;
 
-namespace Api.Data.Models
+namespace DataModels.Responses.Enums
 {
     public enum Subcategory
     {
