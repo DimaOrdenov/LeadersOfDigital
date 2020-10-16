@@ -18,6 +18,10 @@ namespace Api
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>
             Host.CreateDefaultBuilder(args)
+             .ConfigureAppConfiguration(config =>
+             {
+                 config.AddJsonFile("secrets.json", optional: true, reloadOnChange: true);
+             })
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder.UseStartup<Startup>();
