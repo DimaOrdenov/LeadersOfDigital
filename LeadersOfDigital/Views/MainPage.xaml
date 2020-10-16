@@ -1,0 +1,103 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<ntcViewControls:BasePage xmlns:ntcViewControls="clr-namespace:NoTryCatch.Xamarin.Portable.ViewControls;assembly=NoTryCatch.Xamarin.Portable"
+                          xmlns="http://xamarin.com/schemas/2014/forms"
+                          xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                          xmlns:local="clr-namespace:LeadersOfDigital"
+                          xmlns:ffimageSvg="clr-namespace:FFImageLoading.Svg.Forms;assembly=FFImageLoading.Svg.Forms"
+                          xmlns:xameff="clr-namespace:XamEffects;assembly=XamEffects"
+                          xmlns:viewcontrols="clr-namespace:LeadersOfDigital.ViewControls"
+                          x:Class="LeadersOfDigital.Views.MainPage"
+                          NavigationPage.HasNavigationBar="False">
+
+    <AbsoluteLayout>
+
+        <ContentView Content="{Binding MainMap}"
+                     AbsoluteLayout.LayoutFlags="All"
+                     AbsoluteLayout.LayoutBounds="0,0,1,1" />
+
+        <viewcontrols:ShadowFrame AbsoluteLayout.LayoutFlags="WidthProportional,PositionProportional"
+                                  AbsoluteLayout.LayoutBounds="0,0.07,1,-1">
+            <StackLayout Spacing="16"
+                         Padding="12,0"
+                         Orientation="Horizontal">
+
+                <Frame CornerRadius="8">
+                    <ContentView xameff:Commands.Tap="{Binding BurgerMenuCommand}"
+                                 xameff:TouchEffect.Color="{x:Static local:AppColors.RippleEffectBlack}"
+                                 Padding="14"
+                                 BackgroundColor="White">
+                        <ffimageSvg:SvgCachedImage x:Name="burgerMenuImage"
+                                                   Source="{x:Static local:AppSvgImages.IcBurger}"
+                                                   WidthRequest="22"
+                                                   HeightRequest="22" />
+                    </ContentView>
+                </Frame>
+
+                <Frame CornerRadius="8"
+                       BackgroundColor="{x:Static local:AppColors.BgWhite}"
+                       HorizontalOptions="FillAndExpand"
+                       Padding="16,0">
+                    <Entry Placeholder="Поиск адреса" />
+                </Frame>
+
+            </StackLayout>
+        </viewcontrols:ShadowFrame>
+
+        <viewcontrols:ShadowFrame AbsoluteLayout.LayoutFlags="PositionProportional"
+                                  AbsoluteLayout.LayoutBounds="0.97,0.4,-1,-1">
+            <Frame CornerRadius="8">
+                <Grid BackgroundColor="White">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+
+                    <ContentView xameff:Commands.Tap="{Binding ZoomInCommand}"
+                                 xameff:TouchEffect.Color="{x:Static local:AppColors.RippleEffectBlack}"
+                                 Padding="14">
+                        <ffimageSvg:SvgCachedImage x:Name="zoomInImage"
+                                                   Source="{x:Static local:AppSvgImages.IcPlus}"
+                                                   WidthRequest="22"
+                                                   HeightRequest="22" />
+                    </ContentView>
+
+                    <ContentView Grid.Row="1"
+                                 xameff:Commands.Tap="{Binding ZoomOutCommand}"
+                                 xameff:TouchEffect.Color="{x:Static local:AppColors.RippleEffectBlack}"
+                                 Padding="14">
+                        <ffimageSvg:SvgCachedImage x:Name="zoomOutImage"
+                                                   Source="{x:Static local:AppSvgImages.IcMinus}"
+                                                   WidthRequest="22"
+                                                   HeightRequest="22" />
+                    </ContentView>
+                </Grid>
+            </Frame>
+        </viewcontrols:ShadowFrame>
+
+        <viewcontrols:ShadowFrame AbsoluteLayout.LayoutFlags="PositionProportional"
+                                  AbsoluteLayout.LayoutBounds="0.97,0.63,-1,-1">
+            <Frame CornerRadius="8">
+                <ContentView xameff:Commands.Tap="{Binding ShowMeCommand}"
+                             xameff:TouchEffect.Color="{x:Static local:AppColors.RippleEffectBlack}"
+                             Padding="14"
+                             BackgroundColor="White">
+                    <ffimageSvg:SvgCachedImage x:Name="showMeImage"
+                                               Source="{x:Static local:AppSvgImages.IcNavigation}"
+                                               WidthRequest="22"
+                                               HeightRequest="22" />
+                </ContentView>
+            </Frame>
+        </viewcontrols:ShadowFrame>
+
+        <ActivityIndicator AbsoluteLayout.LayoutFlags="PositionProportional"
+                           AbsoluteLayout.LayoutBounds="0.5,0.5,-1,-1"
+                           Color="{x:Static local:AppColors.Main}"
+                           IsVisible="{Binding IsLoading}"
+                           IsRunning="{Binding IsLoading}" />
+
+    </AbsoluteLayout>
+
+</ntcViewControls:BasePage>

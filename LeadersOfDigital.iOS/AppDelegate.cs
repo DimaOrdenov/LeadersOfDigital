@@ -1,8 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-
-using Foundation;
+﻿using Foundation;
+using LeadersOfDigital.Containers;
+using LeadersOfDigital.iOS.DependencyServices;
+using LeadersOfDigital.iOS.Helpers;
 using UIKit;
 
 namespace LeadersOfDigital.iOS
@@ -22,10 +21,34 @@ namespace LeadersOfDigital.iOS
         //
         public override bool FinishedLaunching(UIApplication app, NSDictionary options)
         {
+            Rg.Plugins.Popup.Popup.Init();
+
             global::Xamarin.Forms.Forms.Init();
+
+            IocContainer.Init(new PlatformAlertMessageService());
+
+            // Init nugets
+            XamEffects.iOS.Effects.Init();
+
+            FFImageLoading.Forms.Platform.CachedImageRenderer.Init();
+
+            Hackiftekhar.IQKeyboardManager.Xamarin.IQKeyboardManager.SharedManager().Enable = true;
+
+            Xamarin.FormsGoogleMaps.Init(Secrets.GoogleApiKey);
+
             LoadApplication(new App());
 
             return base.FinishedLaunching(app, options);
+        }
+
+        public override bool OpenUrl(UIApplication app, NSUrl url, NSDictionary options)
+        {
+            if (Xamarin.Essentials.Platform.OpenUrl(app, url, options))
+            {
+                return true;
+            }
+
+            return base.OpenUrl(app, url, options);
         }
     }
 }
