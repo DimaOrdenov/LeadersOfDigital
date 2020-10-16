@@ -9,10 +9,10 @@ namespace Api.Data
 {
     public class MainContext : DbContext
     {
+        public MainContext(DbContextOptions<MainContext> options) : base(options)
+        {
+        }
         public DbSet<Facility> Facilities { get; set; }
         public DbSet<Barrier> Barriers { get; set; }
-
-        protected override void OnConfiguring(DbContextOptionsBuilder options)
-            => options.UseSqlite("Data Source=city.db");
     }
 }
