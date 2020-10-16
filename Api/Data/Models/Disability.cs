@@ -2,5 +2,9 @@
 {
     public enum Disability
     {
+        K,
+        O,
+        S,
+        G
     }
 }

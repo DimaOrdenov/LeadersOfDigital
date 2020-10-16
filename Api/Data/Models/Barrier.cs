@@ -7,11 +7,12 @@ namespace Api.Data.Models
 {
     public class Barrier
     {
-        public int Id { get; set; }
-
+        public int BarrierId { get; set; }
         public BarrierType BarrierType { get; set; }
         public string Comment { get; set; }
+        public IEnumerable<Disability> AvailableFor { get; } = new List<Disability>();
 
-        public IEnumerable<Disability> AvailableFor { get; set; }
+        public int FacilityId { get; set; }
+        public Facility Facility { get; set; }
     }
 }
