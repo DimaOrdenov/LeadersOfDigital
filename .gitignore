@@ -403,6 +403,10 @@ ASALocalRun/
 
 # Local History for Visual Studio
 .localhistory/
+/Api/secrets.json
+/Api/Api.xml
+/Api/aws-beanstalk-tools-defaults.json
+
 
 secrets.json
 secrets.*.json

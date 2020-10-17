@@ -1,13 +1,13 @@
 ﻿using DataModels.Responses.Enums;
+using System;
+using System.Collections.Generic;
+using System.Text;
 
-namespace Api.Data.Models
+namespace DataModels.Responses
 {
-    public class Disability
+    public class DisabilityResponse
     {
         public int DisabilityId { get; set; }
         public DisabilityType DisabilityType { get; set; }
-
-        public int BarrierId { get; set; }
-        public Barrier Barrier { get; set; }
     }
 }

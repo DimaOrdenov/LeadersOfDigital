@@ -2,7 +2,7 @@
 
 namespace Api.Migrations
 {
-    public partial class InitialCreate : Migration
+    public partial class init : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -11,7 +11,7 @@ namespace Api.Migrations
                 columns: table => new
                 {
                     FacilityId = table.Column<int>(nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     Subcategory = table.Column<int>(nullable: false),
                     Name = table.Column<string>(nullable: true),
                     Street = table.Column<string>(nullable: true),
@@ -30,7 +30,7 @@ namespace Api.Migrations
                 columns: table => new
                 {
                     BarrierId = table.Column<int>(nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     BarrierType = table.Column<int>(nullable: false),
                     Comment = table.Column<string>(nullable: true),
                     FacilityId = table.Column<int>(nullable: false)
@@ -46,14 +46,42 @@ namespace Api.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "Disability",
+                columns: table => new
+                {
+                    DisabilityId = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    DisabilityType = table.Column<int>(nullable: false),
+                    BarrierId = table.Column<int>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Disability", x => x.DisabilityId);
+                    table.ForeignKey(
+                        name: "FK_Disability_Barriers_BarrierId",
+                        column: x => x.BarrierId,
+                        principalTable: "Barriers",
+                        principalColumn: "BarrierId",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_Barriers_FacilityId",
                 table: "Barriers",
                 column: "FacilityId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Disability_BarrierId",
+                table: "Disability",
+                column: "BarrierId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropTable(
+                name: "Disability");
+
             migrationBuilder.DropTable(
                 name: "Barriers");
 
