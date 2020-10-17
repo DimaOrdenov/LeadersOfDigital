@@ -1,16 +1,18 @@
 ﻿<?xml version="1.0" encoding="UTF-8" ?>
-<viewcontrols:BasePage xmlns="http://xamarin.com/schemas/2014/forms"
-                       xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-                       x:Class="LeadersOfDigital.Views.Onboarding.OnboardingOnePage"
-                       xmlns:sys="clr-namespace:System;assembly=mscorlib"
-                       xmlns:local="clr-namespace:LeadersOfDigital"
-                       xmlns:ffimageSvg="clr-namespace:FFImageLoading.Svg.Forms;assembly=FFImageLoading.Svg.Forms"
-                       xmlns:xameff="clr-namespace:XamEffects;assembly=XamEffects"
-                       xmlns:ntcViewcontrols="clr-namespace:NoTryCatch.Xamarin.Portable.ViewControls;assembly=NoTryCatch.Xamarin.Portable"
-                       xmlns:viewcontrols="clr-namespace:LeadersOfDigital.ViewControls"
-                       xmlns:commonViews="clr-namespace:LeadersOfDigital.Views.Common"
-                       xmlns:behaviors="clr-namespace:LeadersOfDigital.Behaviors"
-                       xmlns:converters="clr-namespace:NoTryCatch.Xamarin.Portable.Converters;assembly=NoTryCatch.Xamarin.Portable"
-                       xmlns:pancake="clr-namespace:Xamarin.Forms.PancakeView;assembly=Xamarin.Forms.PancakeView">
-    <ContentPage.Content />
-</viewcontrols:BasePage>
+<ntcViewcontrols:BasePage xmlns="http://xamarin.com/schemas/2014/forms"
+                          xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                          x:Class="LeadersOfDigital.Views.Onboarding.OnboardingOnePage"
+                          xmlns:sys="clr-namespace:System;assembly=mscorlib"
+                          xmlns:local="clr-namespace:LeadersOfDigital"
+                          xmlns:ffimageSvg="clr-namespace:FFImageLoading.Svg.Forms;assembly=FFImageLoading.Svg.Forms"
+                          xmlns:xameff="clr-namespace:XamEffects;assembly=XamEffects"
+                          xmlns:ntcViewcontrols="clr-namespace:NoTryCatch.Xamarin.Portable.ViewControls;assembly=NoTryCatch.Xamarin.Portable"
+                          xmlns:viewcontrols="clr-namespace:LeadersOfDigital.ViewControls"
+                          xmlns:commonViews="clr-namespace:LeadersOfDigital.Views.Common"
+                          xmlns:behaviors="clr-namespace:LeadersOfDigital.Behaviors"
+                          xmlns:converters="clr-namespace:NoTryCatch.Xamarin.Portable.Converters;assembly=NoTryCatch.Xamarin.Portable"
+                          xmlns:pancake="clr-namespace:Xamarin.Forms.PancakeView;assembly=Xamarin.Forms.PancakeView">
+
+    <StackLayout />
+
+</ntcViewcontrols:BasePage>
