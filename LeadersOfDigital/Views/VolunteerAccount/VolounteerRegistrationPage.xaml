@@ -93,9 +93,6 @@
                                                         Placeholder="Отчество"
                                                         Margin="0,16,0,0" />
 
-                                <commonViews:DatePickerField DateSelectedCommand="{Binding BirthdateSelectedCommand}"
-                                                             Margin="0,16,0,0" />
-
                                 <StackLayout Orientation="Horizontal"
                                              Spacing="16"
                                              Margin="0,16,0,0"
