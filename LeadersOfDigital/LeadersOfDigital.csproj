@@ -37,6 +37,9 @@
     <Folder Include="Definitions\Requests\" />
     <Folder Include="Definitions\Responses\GoogleApi\" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\DataModels\DataModels.csproj" />
+  </ItemGroup>
 
   <ItemGroup>
     <SharedImage Include="Resources\ic_plus.svg" Resize="False" />
