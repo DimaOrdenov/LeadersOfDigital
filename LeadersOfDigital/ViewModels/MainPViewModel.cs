@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using LeadersOfDigital.Logic;
 using NoTryCatch.Core.Services;
 using NoTryCatch.Xamarin.Portable.Definitions.Enums;
 using NoTryCatch.Xamarin.Portable.Extensions;
@@ -14,6 +15,8 @@ namespace LeadersOfDigital.ViewModels
 {
     public class MainPViewModel : PageViewModel
     {
+        private readonly IFacilitiesLogic _facilitiesLogic;
+
         public ICommand ZoomInCommand { get; }
 
         public ICommand ZoomOutCommand { get; }
@@ -24,9 +27,11 @@ namespace LeadersOfDigital.ViewModels
             INavigationService navigationService,
             IDialogService dialogService,
             IDebuggerService debuggerService,
-            IExceptionHandler exceptionHandler)
+            IExceptionHandler exceptionHandler,
+            IFacilitiesLogic facilitiesLogic)
             : base(navigationService, dialogService, debuggerService, exceptionHandler)
         {
+            _facilitiesLogic = facilitiesLogic;
             ZoomInCommand = BuildPageVmCommand(() =>
             {
                 MainMap.MoveToRegion(MainMap.VisibleRegion.WithZoom(2));
@@ -66,7 +71,7 @@ namespace LeadersOfDigital.ViewModels
             {
                 return;
             }
-
+            var p = await  _facilitiesLogic.Get(CancellationToken);
             State = PageStateType.MinorLoading;
 
             await TryMoveToUserLocation();
