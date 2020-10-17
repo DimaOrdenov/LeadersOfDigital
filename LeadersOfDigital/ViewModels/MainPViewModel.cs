@@ -19,6 +19,7 @@ using System.Collections.Generic;
 using LeadersOfDigital.Definitions.Requests;
 using LeadersOfDigital.ViewModels.VolunteerAccount;
 using LeadersOfDigital.Views.VolunteerAccount;
+using LeadersOfDigital.Views.Map;
 
 namespace LeadersOfDigital.ViewModels
 {
@@ -54,7 +55,7 @@ namespace LeadersOfDigital.ViewModels
             ExtendedUserContext extendedUserContext)
             : base(navigationService, dialogService, debuggerService, exceptionHandler)
         {
-             _facilitiesLogic = facilitiesLogic;
+            _facilitiesLogic = facilitiesLogic;
             _googleMapsApiLogicService = googleMapsApiLogicService;
             _extendedUserContext = extendedUserContext;
 
@@ -177,7 +178,10 @@ namespace LeadersOfDigital.ViewModels
 
             MainMap.MapLongClicked += async (sender, e) =>
             {
-                await DialogService.DisplayAlert(string.Empty, $"Добавить маркер в {e.Point.Latitude};{e.Point.Longitude}", "Да", "Нет");
+                if (await DialogService.DisplayAlert(string.Empty, $"Добавить маркер в {e.Point.Latitude};{e.Point.Longitude}", "Да", "Нет"))
+                {
+                    await NavigationService.NavigatePopupAsync<AddMarkerPage>();
+                }
             };
 
             extendedUserContext.UserContextChanged += (sender, e) => OnPropertyChanged(nameof(CanBecomeVolunteer));
@@ -201,7 +205,7 @@ namespace LeadersOfDigital.ViewModels
             {
                 return;
             }
-            var p = await  _facilitiesLogic.Get(CancellationToken);
+            var p = await _facilitiesLogic.Get(CancellationToken);
             State = PageStateType.MinorLoading;
 
             MainMap.MoveCamera(CameraUpdateFactory.NewPosition(new Position(55.751314, 37.627335)));

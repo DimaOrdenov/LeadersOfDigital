@@ -1,0 +1,188 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<ntcViewcontrols:BasePopupPage xmlns="http://xamarin.com/schemas/2014/forms"
+                               xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                               x:Class="LeadersOfDigital.Views.Map.AddMarkerPage"
+                               xmlns:sys="clr-namespace:System;assembly=mscorlib"
+                               xmlns:local="clr-namespace:LeadersOfDigital"
+                               xmlns:ffimageSvg="clr-namespace:FFImageLoading.Svg.Forms;assembly=FFImageLoading.Svg.Forms"
+                               xmlns:xameff="clr-namespace:XamEffects;assembly=XamEffects"
+                               xmlns:ntcViewcontrols="clr-namespace:NoTryCatch.Xamarin.Portable.ViewControls;assembly=NoTryCatch.Xamarin.Portable"
+                               xmlns:viewcontrols="clr-namespace:LeadersOfDigital.ViewControls"
+                               xmlns:commonViews="clr-namespace:LeadersOfDigital.Views.Common"
+                               xmlns:behaviors="clr-namespace:LeadersOfDigital.Behaviors"
+                               xmlns:converters="clr-namespace:NoTryCatch.Xamarin.Portable.Converters;assembly=NoTryCatch.Xamarin.Portable"
+                               xmlns:pancake="clr-namespace:Xamarin.Forms.PancakeView;assembly=Xamarin.Forms.PancakeView"
+                               xmlns:popupAnimations="clr-namespace:Rg.Plugins.Popup.Animations;assembly=Rg.Plugins.Popup"
+                               BackgroundColor="Transparent"
+                               Padding="0,44,0,0">
+
+    <ntcViewcontrols:BasePopupPage.Animation>
+        <popupAnimations:MoveAnimation PositionIn="Bottom"
+                                       PositionOut="Bottom" />
+    </ntcViewcontrols:BasePopupPage.Animation>
+
+    <viewcontrols:BaseLayout>
+
+        <ntcViewcontrols:BasePicker x:Name="barrierPicker"
+                                    SelectedItem="{Binding SelectedBarrier}"
+                                    Opacity="0">
+            <ntcViewcontrols:BasePicker.Items>
+                <x:String>Бордюр</x:String>
+                <x:String>Ступеньки</x:String>
+            </ntcViewcontrols:BasePicker.Items>
+
+        </ntcViewcontrols:BasePicker>
+
+        <ntcViewcontrols:BasePicker x:Name="reasonPicker"
+                                    SelectedItem="{Binding SelectedReason}"
+                                    Opacity="0">
+            <ntcViewcontrols:BasePicker.Items>
+                <x:String>Плохо</x:String>
+                <x:String>Не очень</x:String>
+            </ntcViewcontrols:BasePicker.Items>
+
+        </ntcViewcontrols:BasePicker>
+
+        <viewcontrols:BaseLayout.Content>
+            <viewcontrols:ShadowFrame>
+                <pancake:PancakeView CornerRadius="20,20,0,0"
+                                     BackgroundColor="White">
+                    <StackLayout>
+
+                        <StackLayout Orientation="Horizontal"
+                                     Padding="12,24,12,0">
+
+                            <Label Text="Создание дорожного события"
+                                   HorizontalOptions="StartAndExpand"
+                                   VerticalOptions="Center"
+                                   FontAttributes="Bold" />
+
+                            <ContentView xameff:Commands.Tap="{Binding NavigateBackCommand}"
+                                         VerticalOptions="Center">
+                                <ffimageSvg:SvgCachedImage Source="{x:Static local:AppSvgImages.IcClose}"
+                                                           WidthRequest="24"
+                                                           HeightRequest="24" />
+                            </ContentView>
+
+                        </StackLayout>
+
+                        <ScrollView>
+                            <StackLayout Padding="12,24,12,40">
+
+                                <Frame CornerRadius="8"
+                                       BackgroundColor="{x:Static local:AppColors.BgMain}"
+                                       Padding="16,8">
+                                    <StackLayout Orientation="Horizontal">
+
+                                        <Label Text="ул.Пушкина, д.1"
+                                               HorizontalOptions="FillAndExpand" />
+
+                                        <ffimageSvg:SvgCachedImage x:Name="addressFieldIcon"
+                                                                   Source="{x:Static local:AppSvgImages.IcNavigation}"
+                                                                   WidthRequest="24"
+                                                                   HeightRequest="24"
+                                                                   HorizontalOptions="End" />
+
+                                    </StackLayout>
+                                </Frame>
+
+                                <Frame CornerRadius="8"
+                                       BackgroundColor="{x:Static local:AppColors.BgMain}"
+                                       Margin="0,24,0,0">
+                                    <StackLayout Orientation="Horizontal"
+                                                 Padding="16,8">
+                                        <StackLayout.Behaviors>
+                                            <behaviors:FocusElementBehavior ElementToFocus="{x:Reference placePicker}" />
+                                        </StackLayout.Behaviors>
+
+                                        <Label Text="{Binding Source={x:Reference placePicker}, Path=SelectedItem}"
+                                               HorizontalOptions="FillAndExpand" />
+
+                                        <ffimageSvg:SvgCachedImage x:Name="placeFieldIcon"
+                                                                   Source="{x:Static local:AppSvgImages.IcChevronLeft}"
+                                                                   Rotation="90"
+                                                                   WidthRequest="24"
+                                                                   HeightRequest="24" />
+
+                                    </StackLayout>
+                                </Frame>
+
+                                <Frame CornerRadius="8"
+                                       BackgroundColor="{x:Static local:AppColors.BgMain}"
+                                       Margin="0,24,0,0">
+                                    <StackLayout Orientation="Horizontal"
+                                                 Padding="16,8">
+                                        <StackLayout.Behaviors>
+                                            <behaviors:FocusElementBehavior ElementToFocus="{x:Reference reasonPicker}" />
+                                        </StackLayout.Behaviors>
+
+                                        <Label Text="{Binding Source={x:Reference reasonPicker}, Path=SelectedItem}"
+                                               HorizontalOptions="FillAndExpand" />
+
+                                        <ffimageSvg:SvgCachedImage x:Name="reasonFieldIcon"
+                                                                   Source="{x:Static local:AppSvgImages.IcChevronLeft}"
+                                                                   Rotation="90"
+                                                                   WidthRequest="24"
+                                                                   HeightRequest="24" />
+
+                                    </StackLayout>
+                                </Frame>
+
+                                <Frame CornerRadius="8"
+                                       BackgroundColor="{x:Static local:AppColors.BgMain}"
+                                       Margin="0,24,0,0">
+
+                                    <ntcViewcontrols:BaseEditor Text="{Binding Comment}"
+                                                                HorizontalOptions="FillAndExpand" />
+                                </Frame>
+
+                                <Label Text="Прикрепляемые фото"
+                                       Margin="0,32,0,0" />
+
+                                <StackLayout Orientation="Horizontal">
+                                    <StackLayout Orientation="Horizontal"
+                                                 BindableLayout.ItemsSource="{Binding PhotosCollection}">
+                                        <BindableLayout.ItemTemplate>
+                                            <DataTemplate>
+                                                <Frame CornerRadius="8">
+                                                    <Image Source="{Binding .}"
+                                                           WidthRequest="80"
+                                                           HeightRequest="80" />
+                                                </Frame>
+                                            </DataTemplate>
+                                        </BindableLayout.ItemTemplate>
+                                    </StackLayout>
+
+                                    <pancake:PancakeView BorderColor="{x:Static local:AppColors.Primary}"
+                                                         BorderIsDashed="True"
+                                                         BorderDashPattern="8,8"
+                                                         BorderThickness="2"
+                                                         CornerRadius="8"
+                                                         WidthRequest="80"
+                                                         HeightRequest="80">
+                                        <ContentView xameff:TouchEffect.Color="{x:Static local:AppColors.RippleEffectBlack}"
+                                                     xameff:Commands.Tap="{Binding AddPhotoCommand}">
+                                            <Label Text="+"
+                                                   FontAttributes="Bold"
+                                                   FontSize="24"
+                                                   VerticalOptions="Center"
+                                                   HorizontalOptions="Center" />
+                                        </ContentView>
+
+                                    </pancake:PancakeView>
+                                </StackLayout>
+
+                                <Button Text="Оставить метку"
+                                        Command="{Binding RegisterMarker}"
+                                        VerticalOptions="End" />
+
+                            </StackLayout>
+                        </ScrollView>
+
+                    </StackLayout>
+                </pancake:PancakeView>
+            </viewcontrols:ShadowFrame>
+        </viewcontrols:BaseLayout.Content>
+    </viewcontrols:BaseLayout>
+
+</ntcViewcontrols:BasePopupPage>

@@ -34,5 +34,7 @@ namespace LeadersOfDigital
         public static SvgImageSource IcStar => SvgImageSource.FromFile("ic_star.svg");
 
         public static SvgImageSource IcUser => SvgImageSource.FromFile("ic_user.svg");
+
+        public static SvgImageSource IcChevronLeft => SvgImageSource.FromFile("ic_chevron_left.svg");
     }
 }

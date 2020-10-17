@@ -11,6 +11,8 @@ using LeadersOfDigital.Views.VolunteerAccount;
 using LeadersOfDigital.ViewModels.VolunteerAccount;
 using LeadersOfDigital.BusinessLayer;
 using LeadersOfDigital.Helpers;
+using LeadersOfDigital.ViewModels.Map;
+using LeadersOfDigital.Views.Map;
 
 namespace LeadersOfDigital.Containers
 {
@@ -42,6 +44,7 @@ namespace LeadersOfDigital.Containers
             builder.RegisterType<MainPViewModel>().AsSelf();
             builder.RegisterType<VolounteerRegistrationViewModel>().AsSelf();
             builder.RegisterType<VolounteerAccountViewModel>().AsSelf();
+            builder.RegisterType<AddMarkerViewModel>().AsSelf();
 
             // BL services
             builder.Register(context => new GoogleMapsApiLogicService(new RestClient("https://maps.googleapis.com/maps/"), context.Resolve<UserContext>(), context.Resolve<IDebuggerService>()))
@@ -56,6 +59,7 @@ namespace LeadersOfDigital.Containers
             pageFactory.Configure<MainPage, MainPViewModel>(() => Container.Resolve<MainPViewModel>());
             pageFactory.Configure<VolounteerAccountPage, VolounteerAccountViewModel>(() => Container.Resolve<VolounteerAccountViewModel>());
             pageFactory.Configure<VolounteerRegistrationPage, VolounteerRegistrationViewModel>(() => Container.Resolve<VolounteerRegistrationViewModel>());
+            pageFactory.Configure<AddMarkerPage, AddMarkerViewModel>(() => Container.Resolve<AddMarkerViewModel>());
         }
     }
 }
