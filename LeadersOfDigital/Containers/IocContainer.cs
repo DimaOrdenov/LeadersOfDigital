@@ -1,15 +1,15 @@
-﻿using System;
-using Autofac;
+﻿using Autofac;
 using LeadersOfDigital.ViewModels;
 using LeadersOfDigital.Views;
+using NoTryCatch.BL.Core;
 using NoTryCatch.Core.Services;
 using NoTryCatch.Xamarin.Portable.Services;
 using NoTryCatch.Xamarin.Portable.Services.PlatformServices;
-using LeadersOfDigital.BusinessLayer;
 using RestSharp;
 using NoTryCatch.BL.Core;
 using LeadersOfDigital.Views.VolunteerAccount;
 using LeadersOfDigital.ViewModels.VolunteerAccount;
+using LeadersOfDigital.BusinessLayer;
 
 namespace LeadersOfDigital.Containers
 {
@@ -30,6 +30,13 @@ namespace LeadersOfDigital.Containers
             builder.RegisterType<ExtendedUserContext>().As<UserContext>().AsSelf().SingleInstance();
             builder.RegisterInstance(platformAlertMessageServiceImplementation).As<IPlatformAlertMessageService>().SingleInstance();
 
+            // BL
+            var RC = new RestClient("http://city-env.eba-j4m8mgch.us-east-2.elasticbeanstalk.com/api");
+            builder.RegisterInstance<IRestClient>(RC);
+            builder.RegisterType<BarriersLogic>().As<IBarriersLogic>().SingleInstance();
+            builder.RegisterType<DisabilitiesLogic>().As<IDisabilitiesLogic>().SingleInstance();
+            builder.RegisterType<FacilitiesLogic>().As<IFacilitiesLogic>().SingleInstance();
+
             // ViewModels
             builder.RegisterType<MainPViewModel>().AsSelf();
             builder.RegisterType<VolounteerRegistrationViewModel>().AsSelf();
@@ -48,7 +55,6 @@ namespace LeadersOfDigital.Containers
             pageFactory.Configure<MainPage, MainPViewModel>(() => Container.Resolve<MainPViewModel>());
             pageFactory.Configure<VolounteerAccountPage, VolounteerAccountViewModel>(() => Container.Resolve<VolounteerAccountViewModel>());
             pageFactory.Configure<VolounteerRegistrationPage, VolounteerRegistrationViewModel>(() => Container.Resolve<VolounteerRegistrationViewModel>());
-
         }
     }
 }

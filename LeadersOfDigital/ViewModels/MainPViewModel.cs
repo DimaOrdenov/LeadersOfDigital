@@ -24,6 +24,7 @@ namespace LeadersOfDigital.ViewModels
 {
     public class MainPViewModel : PageViewModel
     {
+        private readonly IFacilitiesLogic _facilitiesLogic;
         private readonly IGoogleMapsApiLogicService _googleMapsApiLogicService;
         private readonly ExtendedUserContext _extendedUserContext;
 
@@ -48,10 +49,12 @@ namespace LeadersOfDigital.ViewModels
             IDialogService dialogService,
             IDebuggerService debuggerService,
             IExceptionHandler exceptionHandler,
+            IFacilitiesLogic facilitiesLogic,
             IGoogleMapsApiLogicService googleMapsApiLogicService,
             ExtendedUserContext extendedUserContext)
             : base(navigationService, dialogService, debuggerService, exceptionHandler)
         {
+             _facilitiesLogic = facilitiesLogic;
             _googleMapsApiLogicService = googleMapsApiLogicService;
             _extendedUserContext = extendedUserContext;
 
@@ -198,7 +201,7 @@ namespace LeadersOfDigital.ViewModels
             {
                 return;
             }
-
+            var p = await  _facilitiesLogic.Get(CancellationToken);
             State = PageStateType.MinorLoading;
 
             MainMap.MoveCamera(CameraUpdateFactory.NewPosition(new Position(55.751314, 37.627335)));

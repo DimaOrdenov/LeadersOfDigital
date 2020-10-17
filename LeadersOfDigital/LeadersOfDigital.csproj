@@ -31,7 +31,6 @@
     <Folder Include="Resources\" />
     <Folder Include="Containers\" />
     <Folder Include="ViewControls\" />
-    <Folder Include="BusinessLayer\" />
     <Folder Include="Definitions\" />
     <Folder Include="Definitions\Responses\" />
     <Folder Include="Definitions\Requests\" />
@@ -41,6 +40,9 @@
     <Folder Include="Views\Common\" />
     <Folder Include="Behaviors\" />
     <Folder Include="ViewModels\Common\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\DataModels\DataModels.csproj" />
   </ItemGroup>
 
   <ItemGroup>
