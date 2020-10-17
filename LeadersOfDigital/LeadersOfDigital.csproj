@@ -19,6 +19,11 @@
     <PackageReference Include="NoTryCatch.Bl.Core" Version="1.0.0" />
     <PackageReference Include="Resizetizer.NT" Version="0.2.1-ntc" />
     <PackageReference Include="Autofac" Version="6.0.0" />
+    <PackageReference Include="Mobile.BuildTools" Version="1.4.0.638">
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+    <PackageReference Include="Xamarin.Forms.PancakeView" Version="2.1.0.714" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Views\" />
@@ -26,6 +31,11 @@
     <Folder Include="Resources\" />
     <Folder Include="Containers\" />
     <Folder Include="ViewControls\" />
+    <Folder Include="BusinessLayer\" />
+    <Folder Include="Definitions\" />
+    <Folder Include="Definitions\Responses\" />
+    <Folder Include="Definitions\Requests\" />
+    <Folder Include="Definitions\Responses\GoogleApi\" />
   </ItemGroup>
 
   <ItemGroup>
@@ -33,6 +43,19 @@
     <SharedImage Include="Resources\ic_minus.svg" Resize="False" />
     <SharedImage Include="Resources\ic_navigation.svg" Resize="False" />
     <SharedImage Include="Resources\ic_burger.svg" Resize="False" />
+    <SharedImage Include="Resources\ic_mic.svg" Resize="False" />
+    <SharedImage Include="Resources\ic_shield_ok.svg" Resize="False" />
+    <SharedImage Include="Resources\ic_pin_1.svg" Resize="False" />
+    <SharedImage Include="Resources\ic_close.svg" Resize="False" />
+    <SharedImage Include="Resources\ic_heart.svg" Resize="False" />
+    <SharedImage Include="Resources\ic_route.svg" Resize="False" />
+    <SharedImage Include="Resources\ic_smile.svg" Resize="False" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="secrets.json">
+      <IncludeInPackage>false</IncludeInPackage>
+    </None>
+  </ItemGroup>
+  
 </Project>

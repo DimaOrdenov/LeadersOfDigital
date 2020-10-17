@@ -2,10 +2,12 @@
 <ntcViewControls:BasePage xmlns:ntcViewControls="clr-namespace:NoTryCatch.Xamarin.Portable.ViewControls;assembly=NoTryCatch.Xamarin.Portable"
                           xmlns="http://xamarin.com/schemas/2014/forms"
                           xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                          xmlns:sys="clr-namespace:System;assembly=mscorlib"
                           xmlns:local="clr-namespace:LeadersOfDigital"
                           xmlns:ffimageSvg="clr-namespace:FFImageLoading.Svg.Forms;assembly=FFImageLoading.Svg.Forms"
                           xmlns:xameff="clr-namespace:XamEffects;assembly=XamEffects"
                           xmlns:viewcontrols="clr-namespace:LeadersOfDigital.ViewControls"
+                          xmlns:pancake="clr-namespace:Xamarin.Forms.PancakeView;assembly=Xamarin.Forms.PancakeView"
                           x:Class="LeadersOfDigital.Views.MainPage"
                           NavigationPage.HasNavigationBar="False">
 
@@ -28,8 +30,8 @@
                                  BackgroundColor="White">
                         <ffimageSvg:SvgCachedImage x:Name="burgerMenuImage"
                                                    Source="{x:Static local:AppSvgImages.IcBurger}"
-                                                   WidthRequest="22"
-                                                   HeightRequest="22" />
+                                                   WidthRequest="24"
+                                                   HeightRequest="24" />
                     </ContentView>
                 </Frame>
 
@@ -41,6 +43,21 @@
                 </Frame>
 
             </StackLayout>
+        </viewcontrols:ShadowFrame>
+
+        <viewcontrols:ShadowFrame AbsoluteLayout.LayoutFlags="PositionProportional"
+                                  AbsoluteLayout.LayoutBounds="0.97,0.17,-1,-1">
+            <Frame CornerRadius="8">
+                <ContentView xameff:Commands.Tap="{Binding MicCommand}"
+                             xameff:TouchEffect.Color="{x:Static local:AppColors.RippleEffectBlack}"
+                             Padding="14"
+                             BackgroundColor="White">
+                    <ffimageSvg:SvgCachedImage x:Name="micImage"
+                                               Source="{x:Static local:AppSvgImages.IcMic}"
+                                               WidthRequest="24"
+                                               HeightRequest="24" />
+                </ContentView>
+            </Frame>
         </viewcontrols:ShadowFrame>
 
         <viewcontrols:ShadowFrame AbsoluteLayout.LayoutFlags="PositionProportional"
@@ -60,8 +77,8 @@
                                  Padding="14">
                         <ffimageSvg:SvgCachedImage x:Name="zoomInImage"
                                                    Source="{x:Static local:AppSvgImages.IcPlus}"
-                                                   WidthRequest="22"
-                                                   HeightRequest="22" />
+                                                   WidthRequest="24"
+                                                   HeightRequest="24" />
                     </ContentView>
 
                     <ContentView Grid.Row="1"
@@ -70,8 +87,8 @@
                                  Padding="14">
                         <ffimageSvg:SvgCachedImage x:Name="zoomOutImage"
                                                    Source="{x:Static local:AppSvgImages.IcMinus}"
-                                                   WidthRequest="22"
-                                                   HeightRequest="22" />
+                                                   WidthRequest="24"
+                                                   HeightRequest="24" />
                     </ContentView>
                 </Grid>
             </Frame>
@@ -86,10 +103,142 @@
                              BackgroundColor="White">
                     <ffimageSvg:SvgCachedImage x:Name="showMeImage"
                                                Source="{x:Static local:AppSvgImages.IcNavigation}"
-                                               WidthRequest="22"
-                                               HeightRequest="22" />
+                                               WidthRequest="24"
+                                               HeightRequest="24" />
                 </ContentView>
             </Frame>
+        </viewcontrols:ShadowFrame>
+
+        <viewcontrols:ShadowFrame AbsoluteLayout.LayoutFlags="PositionProportional,WidthProportional"
+                                  AbsoluteLayout.LayoutBounds="0,1,1,-1"
+                                  IsVisible="{Binding IsBuildingRouting}"
+                                  VerticalOptions="End">
+            <pancake:PancakeView CornerRadius="20,20,0,0"
+                                 BackgroundColor="{x:Static local:AppColors.BgWhite}">
+                <ScrollView>
+                    <StackLayout Padding="12,16,12,40">
+                        <StackLayout Orientation="Horizontal"
+                                     Spacing="12">
+
+                            <StackLayout>
+
+                                <Grid ColumnSpacing="6">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="24" />
+                                        <ColumnDefinition Width="*" />
+                                    </Grid.ColumnDefinitions>
+
+                                    <ffimageSvg:SvgCachedImage x:Name="originImage"
+                                                               Source="{x:Static local:AppSvgImages.IcNavigation}"
+                                                               WidthRequest="24"
+                                                               HeightRequest="24" />
+
+                                    <Label Grid.Column="1"
+                                           Text="Текущее местоположение" />
+
+                                </Grid>
+
+                                <BoxView HeightRequest="1"
+                                         Margin="0,16,0,0"
+                                         Color="#EBEBF0" />
+
+                                <Grid ColumnSpacing="6"
+                                      Margin="0,16,0,0">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="24" />
+                                        <ColumnDefinition Width="*" />
+                                    </Grid.ColumnDefinitions>
+
+                                    <ffimageSvg:SvgCachedImage x:Name="destinationImage"
+                                                               Source="{x:Static local:AppSvgImages.IcPin1}"
+                                                               WidthRequest="24"
+                                                               HeightRequest="24" />
+
+                                    <Label Grid.Column="1"
+                                           Text="{Binding Destination}" />
+
+                                </Grid>
+
+                            </StackLayout>
+
+                            <ContentView xameff:Commands.Tap="{Binding CancelRoutingCommand}"
+                                         xameff:TouchEffect.Color="{x:Static local:AppColors.RippleEffectWhite}"
+                                         Padding="6"
+                                         BackgroundColor="White"
+                                         VerticalOptions="Start">
+                                <ffimageSvg:SvgCachedImage Source="{x:Static local:AppSvgImages.IcClose}"
+                                                           WidthRequest="24"
+                                                           HeightRequest="24" />
+                            </ContentView>
+
+                        </StackLayout>
+
+                        <Label Text="Что вы хотите сделать?"
+                               FontAttributes="Bold"
+                               Margin="0,34,0,0" />
+
+                        <ScrollView Orientation="Horizontal"
+                                    Margin="0,16,0,0">
+                            <StackLayout Orientation="Horizontal"
+                                         Spacing="24">
+
+                                <Frame CornerRadius="8"
+                                       BackgroundColor="{x:Static local:AppColors.Main}"
+                                       Padding="16,8">
+                                    <StackLayout Orientation="Horizontal"
+                                                 Spacing="10"
+                                                 xameff:Commands.Tap="{Binding GetRouteCommand}"
+                                                 xameff:TouchEffect.Color="{x:Static local:AppColors.RippleEffectBlack}">
+
+                                        <ffimageSvg:SvgCachedImage Source="{x:Static local:AppSvgImages.IcRoute}"
+                                                                   WidthRequest="24"
+                                                                   HeightRequest="24" />
+
+                                        <Label TextColor="#FFFFFF">
+                                            <Label.FormattedText>
+                                                <FormattedString>
+                                                    <Span Text="Проложить" />
+                                                    <Span Text="{x:Static sys:Environment.NewLine}" />
+                                                    <Span Text="маршрут" />
+                                                </FormattedString>
+                                            </Label.FormattedText>
+                                        </Label>
+
+                                    </StackLayout>
+                                </Frame>
+
+                                <Frame CornerRadius="8"
+                                       BackgroundColor="{x:Static local:AppColors.BgMain}"
+                                       Padding="16,8">
+                                    <StackLayout Orientation="Horizontal"
+                                                 Spacing="10"
+                                                 xameff:Commands.Tap="{Binding CallVolunteerCommand}"
+                                                 xameff:TouchEffect.Color="{x:Static local:AppColors.RippleEffectBlack}">
+
+                                        <ffimageSvg:SvgCachedImage x:Name="callVolunteerImage"
+                                                                   Source="{x:Static local:AppSvgImages.IcSmile}"
+                                                                   WidthRequest="24"
+                                                                   HeightRequest="24" />
+
+                                        <Label>
+                                            <Label.FormattedText>
+                                                <FormattedString>
+                                                    <Span Text="Вызвать" />
+                                                    <Span Text="{x:Static sys:Environment.NewLine}" />
+                                                    <Span Text="волонтера" />
+                                                </FormattedString>
+                                            </Label.FormattedText>
+                                        </Label>
+
+                                    </StackLayout>
+                                </Frame>
+
+                            </StackLayout>
+                        </ScrollView>
+
+                    </StackLayout>
+                </ScrollView>
+            </pancake:PancakeView>
         </viewcontrols:ShadowFrame>
 
         <ActivityIndicator AbsoluteLayout.LayoutFlags="PositionProportional"

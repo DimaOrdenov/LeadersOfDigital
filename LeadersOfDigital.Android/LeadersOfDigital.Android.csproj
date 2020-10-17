@@ -71,6 +71,7 @@
     <Compile Include="CustomRenderers\EditorRenderer.cs" />
     <Compile Include="CustomRenderers\EntryRenderer.cs" />
     <Compile Include="CustomRenderers\ShadowFrameRenderer.cs" />
+    <Compile Include="CustomRenderers\CustomMapRenderer.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\AboutResources.txt" />
@@ -98,6 +99,14 @@
       <SubType></SubType>
       <Generator></Generator>
     </AndroidResource>
+    <AndroidResource Include="Resources\drawable\ic_my_location_pin.png">
+      <SubType></SubType>
+      <Generator></Generator>
+    </AndroidResource>
+    <AndroidResource Include="Resources\drawable\ic_pin.png">
+      <SubType></SubType>
+      <Generator></Generator>
+    </AndroidResource>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Resources\drawable\" />
@@ -109,6 +118,9 @@
       <Project>{CA7DA5DF-EA17-45BC-8BAB-DE4BA05B8BE5}</Project>
       <Name>LeadersOfDigital</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidAsset Include="Assets\ic_pin.png" />
   </ItemGroup>
  <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
 </Project>

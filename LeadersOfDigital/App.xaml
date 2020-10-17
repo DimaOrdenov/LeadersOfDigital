@@ -35,6 +35,8 @@
                    ApplyToDerivedTypes="True">
                 <Setter Property="TextColor"
                         Value="{x:Static local:AppColors.Secondary}" />
+                <Setter Property="FontSize"
+                        Value="16" />
             </Style>
             <Style TargetType="Editor"
                    ApplyToDerivedTypes="True" />

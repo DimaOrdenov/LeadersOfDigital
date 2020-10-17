@@ -8,6 +8,9 @@ using NoTryCatch.Core.Services;
 using NoTryCatch.Xamarin.Portable.Services;
 using NoTryCatch.Xamarin.Portable.Services.PlatformServices;
 using RestSharp;
+using LeadersOfDigital.BusinessLayer;
+using RestSharp;
+using NoTryCatch.BL.Core;
 
 namespace LeadersOfDigital.Containers
 {
@@ -25,6 +28,7 @@ namespace LeadersOfDigital.Containers
             builder.RegisterType<DialogService>().As<IDialogService>().SingleInstance();
             builder.RegisterType<DebuggerService>().As<IDebuggerService>().SingleInstance();
             builder.RegisterType<ExceptionHandler>().As<IExceptionHandler>().SingleInstance();
+            builder.RegisterType<UserContext>().AsSelf().SingleInstance();
             builder.RegisterInstance(platformAlertMessageServiceImplementation).As<IPlatformAlertMessageService>().SingleInstance();
 
 
@@ -38,6 +42,11 @@ namespace LeadersOfDigital.Containers
 
             // ViewModels
             builder.RegisterType<MainPViewModel>().AsSelf();
+
+            // BL services
+            builder.Register(context => new GoogleMapsApiLogicService(new RestClient("https://maps.googleapis.com/maps/"), context.Resolve<UserContext>(), context.Resolve<IDebuggerService>()))
+                .As<IGoogleMapsApiLogicService>()
+                .SingleInstance();
 
             Container = builder.Build();
 

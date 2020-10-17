@@ -3,19 +3,30 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using LeadersOfDigital.Logic;
+using LeadersOfDigital.BusinessLayer;
+using GoogleApi = LeadersOfDigital.Definitions.Models.GoogleApi;
+using LeadersOfDigital.ViewControls;
+using NoTryCatch.BL.Core.Exceptions;
+using NoTryCatch.BL.Core.Enums;
 using NoTryCatch.Core.Services;
+using NoTryCatch.Xamarin.Definitions;
 using NoTryCatch.Xamarin.Portable.Definitions.Enums;
 using NoTryCatch.Xamarin.Portable.Extensions;
 using NoTryCatch.Xamarin.Portable.Services;
 using NoTryCatch.Xamarin.Portable.ViewModels;
 using Xamarin.Essentials;
 using Xamarin.Forms.GoogleMaps;
+using System.Collections.Generic;
+using LeadersOfDigital.Definitions.Requests;
 
 namespace LeadersOfDigital.ViewModels
 {
     public class MainPViewModel : PageViewModel
     {
         private readonly IFacilitiesLogic _facilitiesLogic;
+        private readonly IGoogleMapsApiLogicService _googleMapsApiLogicService;
+        private bool _isRouting;
+        private string _destination;
 
         public ICommand ZoomInCommand { get; }
 
@@ -23,15 +34,24 @@ namespace LeadersOfDigital.ViewModels
 
         public ICommand ShowMeCommand { get; }
 
+        public ICommand GetRouteCommand { get; }
+
+        public ICommand CallVolunteerCommand { get; }
+
+        public ICommand CancelRoutingCommand { get; }
+
         public MainPViewModel(
             INavigationService navigationService,
             IDialogService dialogService,
             IDebuggerService debuggerService,
             IExceptionHandler exceptionHandler,
-            IFacilitiesLogic facilitiesLogic)
+            IFacilitiesLogic facilitiesLogic,
+            IGoogleMapsApiLogicService googleMapsApiLogicService)
             : base(navigationService, dialogService, debuggerService, exceptionHandler)
         {
-            _facilitiesLogic = facilitiesLogic;
+             _facilitiesLogic = facilitiesLogic;
+            _googleMapsApiLogicService = googleMapsApiLogicService;
+
             ZoomInCommand = BuildPageVmCommand(() =>
             {
                 MainMap.MoveToRegion(MainMap.VisibleRegion.WithZoom(2));
@@ -50,20 +70,109 @@ namespace LeadersOfDigital.ViewModels
             {
                 State = PageStateType.MinorLoading;
 
-                await TryMoveToUserLocation();
+                (bool result, Position myPosition) = await TryGetUserLocation();
+
+                if (result)
+                {
+                    MoveToPosition(myPosition);
+                }
 
                 State = PageStateType.Default;
             });
 
-            MainMap = new Xamarin.Forms.GoogleMaps.Map
+            GetRouteCommand = BuildPageVmCommand(async () =>
+            {
+                State = PageStateType.MinorLoading;
+
+                State = PageStateType.Default;
+            });
+
+            CallVolunteerCommand = BuildPageVmCommand(async () =>
+            {
+                State = PageStateType.MinorLoading;
+
+                State = PageStateType.Default;
+            });
+
+            CancelRoutingCommand = BuildPageVmCommand(async () =>
+            {
+                State = PageStateType.MinorLoading;
+
+                MainMap.Polylines.Clear();
+
+                OnPropertyChanged(nameof(IsBuildingRouting));
+
+                State = PageStateType.Default;
+            });
+
+            MainMap = new CustomMap
             {
                 IsIndoorEnabled = true,
+                PinClickedCommand = BuildPageVmCommand<Pin>(async pin =>
+                {
+                    State = PageStateType.Loading;
+
+                    MainMap.Polylines.Clear();
+
+                    await ExceptionHandler.PerformCatchableTask(
+                        new ViewModelPerformableAction(async () =>
+                        {
+                            (bool result, Position myPosition) = await TryGetUserLocation();
+
+                            if (!result)
+                            {
+                                throw new BusinessLogicException(LogicExceptionType.BadRequest, "Не удалось определить ваше местоположение");
+                            }
+
+                            GoogleApi.GoogleDirection googleDirection =
+                                await _googleMapsApiLogicService.GetDirections(
+                                    new GoogleApiDirectionsRequest
+                                    {
+                                        TravelMode = "walking",
+                                        Origin = myPosition,
+                                        Destination = pin.Position,
+                                    },
+                                    CancellationToken);
+
+                            IEnumerable<Position> positions = Decode(googleDirection.Routes.First().OverviewPolyline.Points);
+
+                            Polyline polyline = new Polyline
+                            {
+                                StrokeColor = AppColors.Main,
+                                StrokeWidth = 4,
+                            };
+
+                            foreach (Position position in positions)
+                            {
+                                polyline.Positions.Add(position);
+                            }
+
+                            MainMap.Polylines.Add(polyline);
+
+                            Destination = pin.Address;
+                        }));
+
+                    State = PageStateType.Default;
+
+                    OnPropertyChanged(nameof(IsBuildingRouting));
+                }),
             };
 
-            MainMap.MoveCamera(CameraUpdateFactory.NewPosition(new Position(55.751314, 37.627335)));
+            MainMap.MapLongClicked += async (sender, e) =>
+            {
+                await DialogService.DisplayAlert(string.Empty, $"Добавить маркер в {e.Point.Latitude};{e.Point.Longitude}", "Да", "Нет");
+            };
         }
 
-        public Xamarin.Forms.GoogleMaps.Map MainMap { get; }
+        public CustomMap MainMap { get; }
+
+        public bool IsBuildingRouting => MainMap?.Polylines?.Count > 0;
+
+        public string Destination
+        {
+            get => _destination;
+            set => SetProperty(ref _destination, value);
+        }
 
         public override async Task OnAppearing()
         {
@@ -74,45 +183,55 @@ namespace LeadersOfDigital.ViewModels
             var p = await  _facilitiesLogic.Get(CancellationToken);
             State = PageStateType.MinorLoading;
 
-            await TryMoveToUserLocation();
+            MainMap.MoveCamera(CameraUpdateFactory.NewPosition(new Position(55.751314, 37.627335)));
+
+            (bool result, Position myPosition) = await TryGetUserLocation();
+
+            if (result)
+            {
+                MoveToPosition(myPosition);
+            }
+
+            MainMap.Pins.Add(new Pin
+            {
+                Position = new Position(55.751314, 37.627335),
+                Label = "test",
+                Address = "address",
+                //Icon = BitmapDescriptorFactory.FromBundle("ic_pin.png"),
+            });
 
             State = PageStateType.Default;
 
             await base.OnAppearing();
         }
 
-        private async Task<bool> TryMoveToUserLocation()
+        private async Task<(bool, Position)> TryGetUserLocation()
         {
-            Location locationToMove = null;
-
-            Location defaultLocation = new Location(55.751314, 37.627335);
-
             if (await CrossPermissionsExtension.CheckAndRequestPermissionIfNeeded(new Permissions.LocationWhenInUse()) != PermissionStatus.Granted &&
                 await CrossPermissionsExtension.CheckAndRequestPermissionIfNeeded(new Permissions.LocationAlways()) != PermissionStatus.Granted)
             {
-                locationToMove = defaultLocation;
-
-                MoveToPosition(new Position(locationToMove.Latitude, locationToMove.Longitude));
-
-                return false;
+                return (false, default(Position));
             }
 
+            MainMap.MyLocationEnabled = true;
             MainMap.IsShowingUser = true;
+
+            Location location = null;
 
             try
             {
-                locationToMove = await Geolocation.GetLocationAsync(new GeolocationRequest(GeolocationAccuracy.Best));
+                location = await Geolocation.GetLocationAsync(new GeolocationRequest(GeolocationAccuracy.Best));
             }
             catch (Exception e)
             {
                 DebuggerService.Log(e);
             }
 
-            if (locationToMove == null)
+            if (location == null)
             {
                 try
                 {
-                    locationToMove = await Geolocation.GetLastKnownLocationAsync();
+                    location = await Geolocation.GetLastKnownLocationAsync();
                 }
                 catch (Exception e)
                 {
@@ -120,22 +239,63 @@ namespace LeadersOfDigital.ViewModels
                 }
             }
 
-            if (locationToMove == null)
-            {
-                locationToMove = defaultLocation;
+            Position position = location != null ? new Position(location.Latitude, location.Longitude) : default;
 
-                MoveToPosition(new Position(locationToMove.Latitude, locationToMove.Longitude));
-
-                return false;
-            }
-
-            MoveToPosition(new Position(locationToMove.Latitude, locationToMove.Longitude));
-
-            return true;
+            return (position != null, position);
         }
 
         private void MoveToPosition(Position position) =>
             MainMap.MoveToRegion(
                 MapSpan.FromCenterAndRadius(position, Distance.FromKilometers(6)));
+
+        public IEnumerable<Position> Decode(string encodedPoints)
+        {
+            if (string.IsNullOrEmpty(encodedPoints))
+                throw new ArgumentNullException("encodedPoints");
+
+            char[] polylineChars = encodedPoints.ToCharArray();
+            int index = 0;
+
+            int currentLat = 0;
+            int currentLng = 0;
+            int next5bits;
+            int sum;
+            int shifter;
+
+            while (index < polylineChars.Length)
+            {
+                // calculate next latitude
+                sum = 0;
+                shifter = 0;
+                do
+                {
+                    next5bits = (int)polylineChars[index++] - 63;
+                    sum |= (next5bits & 31) << shifter;
+                    shifter += 5;
+                } while (next5bits >= 32 && index < polylineChars.Length);
+
+                if (index >= polylineChars.Length)
+                    break;
+
+                currentLat += (sum & 1) == 1 ? ~(sum >> 1) : (sum >> 1);
+
+                //calculate next longitude
+                sum = 0;
+                shifter = 0;
+                do
+                {
+                    next5bits = (int)polylineChars[index++] - 63;
+                    sum |= (next5bits & 31) << shifter;
+                    shifter += 5;
+                } while (next5bits >= 32 && index < polylineChars.Length);
+
+                if (index >= polylineChars.Length && next5bits >= 32)
+                    break;
+
+                currentLng += (sum & 1) == 1 ? ~(sum >> 1) : (sum >> 1);
+
+                yield return new Position(Convert.ToDouble(currentLat) / 1E5, Convert.ToDouble(currentLng) / 1E5);
+            }
+        }
     }
 }

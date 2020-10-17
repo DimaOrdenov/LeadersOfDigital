@@ -75,6 +75,7 @@
     <Compile Include="CustomRenderers\ExtendedListViewRenderer.cs" />
     <Compile Include="CustomRenderers\ExtendedNavigationPageRenderer.cs" />
     <Compile Include="CustomRenderers\ShadowFrameRender.cs" />
+    <Compile Include="CustomRenderers\CustomMapRenderer.cs" />
   </ItemGroup>
   <ItemGroup>
     <InterfaceDefinition Include="Resources\LaunchScreen.storyboard" />
@@ -162,5 +163,9 @@
     <None Update="secrets.json">
       <IncludeInPackage>false</IncludeInPackage>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="Resources\ic_pin.png" />
+    <BundleResource Include="Resources\ic_my_location_pin.png" />
   </ItemGroup>
 </Project>
