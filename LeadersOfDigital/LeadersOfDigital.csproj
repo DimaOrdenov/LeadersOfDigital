@@ -43,6 +43,8 @@
     <Folder Include="Views\Map\" />
     <Folder Include="ViewModels\Map\" />
     <Folder Include="Definitions\VmLink\" />
+    <Folder Include="Views\Onboarding\" />
+    <Folder Include="ViewModels\Onboarding\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\DataModels\DataModels.csproj" />
