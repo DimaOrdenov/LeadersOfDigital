@@ -10,6 +10,6 @@ namespace DataModels.Requests
 
         public byte[] Photo { get; set; }
 
-        public FacilityRequest Facility { get; set; }
+        public int FacilityId { get; set; }
     }
 }

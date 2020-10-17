@@ -6,6 +6,8 @@ namespace LeadersOfDigital
     {
         public static Color Main => Color.FromHex("#788CFE");
 
+        public static Color LightMain => Color.FromHex("#D0D7FD");
+
         public static Color Secondary => Color.FromHex("#283555");
 
         public static Color BgMain => Color.FromHex("#F8F8FA");

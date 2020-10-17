@@ -76,23 +76,26 @@ namespace LeadersOfDigital.ViewModels.Map
 
                                 byte[] photo = null;
 
-                                if (_photo is StreamImageSource streamImageSource)
+                                try
                                 {
-                                    Stream stream = await streamImageSource.Stream(CancellationToken);
-
+                                    using (FileStream fileStream = new FileStream("image_barrier_1.png", FileMode.Open))
                                     using (MemoryStream memoryStream = new MemoryStream())
                                     {
-                                        await stream.CopyToAsync(memoryStream);
+                                        await fileStream.CopyToAsync(memoryStream);
 
                                         photo = memoryStream.ToArray();
                                     }
+                                }
+                                catch (Exception ex)
+                                {
+                                    DebuggerService.Log(ex);
                                 }
 
                                 await _barriersLogic.Post(
                                     new BarrierRequest
                                     {
                                         BarrierType = BarrierType.Hole,
-                                        Facility = new FacilityRequest { Id = facility.FacilityId },
+                                        FacilityId = facility.FacilityId,
                                         Photo = photo,
                                         Comment = _comment,
                                     },

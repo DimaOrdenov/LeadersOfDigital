@@ -7,6 +7,7 @@ using LeadersOfDigital.Helpers;
 using NoTryCatch.BL.Core;
 using NoTryCatch.Core.Services;
 using RestSharp;
+using System.Linq;
 
 namespace LeadersOfDigital.BusinessLayer
 {
@@ -26,7 +27,7 @@ namespace LeadersOfDigital.BusinessLayer
             request.AddParameter("mode", googleApiDirectionsRequest.TravelMode);
             request.AddParameter("origin", $"{googleApiDirectionsRequest.Origin.Latitude},{googleApiDirectionsRequest.Origin.Longitude}");
             request.AddParameter("destination", $"{googleApiDirectionsRequest.Destination.Latitude},{googleApiDirectionsRequest.Destination.Longitude}");
-            request.AddParameter("alternatives", $"{googleApiDirectionsRequest.Alternatives}");
+            request.AddParameter("waypoints", $"{googleApiDirectionsRequest.Waypoint.Latitude},{googleApiDirectionsRequest.Waypoint.Longitude}");
             request.AddParameter("key", $"{Secrets.GoogleApiKey}");
 
             return ExecuteAsync<GoogleDirection>(request, token);

@@ -1,4 +1,5 @@
-﻿using Xamarin.Forms.GoogleMaps;
+﻿using System.Collections.Generic;
+using Xamarin.Forms.GoogleMaps;
 
 namespace LeadersOfDigital.Definitions.Requests
 {
@@ -7,7 +8,6 @@ namespace LeadersOfDigital.Definitions.Requests
         public GoogleApiDirectionsRequest()
         {
             TravelMode = "walking";
-            Alternatives = true;
         }
 
         /// <summary>
@@ -19,6 +19,6 @@ namespace LeadersOfDigital.Definitions.Requests
 
         public Position Destination { get; set; }
 
-        public bool Alternatives { get; }
+        public Position Waypoint { get; set; }
     }
 }

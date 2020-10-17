@@ -21,6 +21,8 @@ using LeadersOfDigital.ViewModels.VolunteerAccount;
 using LeadersOfDigital.Views.VolunteerAccount;
 using LeadersOfDigital.Views.Map;
 using LeadersOfDigital.Definitions.VmLink;
+using Xamarin.Forms;
+using Xamarin.Forms.Internals;
 
 namespace LeadersOfDigital.ViewModels
 {
@@ -143,32 +145,60 @@ namespace LeadersOfDigital.ViewModels
                                 throw new BusinessLogicException(LogicExceptionType.BadRequest, "Не удалось определить ваше местоположение");
                             }
 
-                            GoogleApi.GoogleDirection googleDirection =
-                                await _googleMapsApiLogicService.GetDirections(
+                            Position firstRoutePoint = new Position();
+                            Position lastRoutePoint = new Position();
+
+                            for (double i = 0; i < 3; i++)
+                            {
+                                Position waypoint = new Position(myPosition.Latitude + (i % 2 == 0 ? 0.005 : 0), myPosition.Longitude + (i > 0 ? 0.005 : 0));
+
+                                GoogleApi.GoogleDirection googleDirection = await _googleMapsApiLogicService.GetDirections(
                                     new GoogleApiDirectionsRequest
                                     {
                                         Origin = myPosition,
                                         Destination = pin.Position,
+                                        Waypoint = waypoint,
                                     },
                                     CancellationToken);
 
-                            IEnumerable<Position> positions = Decode(googleDirection.Routes.First().OverviewPolyline.Points);
+                                IEnumerable<Position> positions = Decode(googleDirection.Routes.First().OverviewPolyline.Points);
 
-                            Polyline polyline = new Polyline
-                            {
-                                StrokeColor = AppColors.Main,
-                                StrokeWidth = 4,
-                            };
+                                Polyline polyline = new Polyline
+                                {
+                                    StrokeColor = i == 0 ? AppColors.Main : AppColors.LightMain,
+                                    StrokeWidth = 4,
+                                    IsClickable = true,
+                                    ZIndex = i == 0 ? 100 : 0,
+                                };
 
-                            foreach (Position position in positions)
-                            {
-                                polyline.Positions.Add(position);
+                                polyline.Clicked += (sender, e) =>
+                                {
+                                    MainMap.Polylines.ForEach(x =>
+                                    {
+                                        x.StrokeColor = AppColors.LightMain;
+                                        x.ZIndex = 0;
+                                    });
+
+                                    polyline.StrokeColor = AppColors.Main;
+                                    polyline.ZIndex = 100;
+                                };
+
+                                foreach (Position position in positions)
+                                {
+                                    polyline.Positions.Add(position);
+                                }
+
+                                MainMap.Polylines.Add(polyline);
+
+                                if (i == 0)
+                                {
+                                    firstRoutePoint = positions.First();
+                                    lastRoutePoint = positions.Last();
+                                }
                             }
 
-                            MainMap.Polylines.Add(polyline);
-
                             MainMap.MoveToRegion(MapSpan.FromBounds(Bounds.FromPositions(
-                                new List<Position> { positions.First(), positions.Last() })).WithZoom(0.5));
+                                new List<Position> { firstRoutePoint, lastRoutePoint })).WithZoom(0.4));
 
                             Destination = pin.Address;
                         }));
@@ -180,36 +210,36 @@ namespace LeadersOfDigital.ViewModels
             };
 
             MainMap.MapLongClicked += async (sender, e) =>
-            {
-                MainMap.MoveToRegion(MapSpan.FromCenterAndRadius(new Position(e.Point.Latitude, e.Point.Longitude), MainMap.VisibleRegion.Radius));
-
-                if (await DialogService.DisplayAlert(
-                    "Дорожное событие",
-                    "Вы можете создать дорожное событие, указав общую проблематику, описать пробему и приложить фотографии",
-                    "Добавить",
-                    "Отмена"))
-                {
-                    State = PageStateType.MinorLoading;
-
-                    string address = string.Empty;
-
-                    try
                     {
-                        Geocoder geocoder = new Geocoder();
-                        IEnumerable<string> addresses = await geocoder.GetAddressesForPositionAsync(e.Point);
+                        MainMap.MoveToRegion(MapSpan.FromCenterAndRadius(new Position(e.Point.Latitude, e.Point.Longitude), MainMap.VisibleRegion.Radius));
 
-                        address = addresses.FirstOrDefault()?.Split("\n")?.FirstOrDefault() ?? "ул.Пушкина, д.1";
-                    }
-                    catch (Exception ex)
-                    {
-                        DebuggerService.Log(ex);
-                    }
+                        if (await DialogService.DisplayAlert(
+                            "Дорожное событие",
+                            "Вы можете создать дорожное событие, указав общую проблематику, описать пробему и приложить фотографии",
+                            "Добавить",
+                            "Отмена"))
+                        {
+                            State = PageStateType.MinorLoading;
 
-                    await NavigationService.NavigatePopupAsync<AddMarkerPage, AddMarkerVmLink>(new AddMarkerVmLink(e.Point.Latitude, e.Point.Longitude, address));
+                            string address = string.Empty;
 
-                    State = PageStateType.Default;
-                }
-            };
+                            try
+                            {
+                                Geocoder geocoder = new Geocoder();
+                                IEnumerable<string> addresses = await geocoder.GetAddressesForPositionAsync(e.Point);
+
+                                address = addresses.FirstOrDefault()?.Split("\n")?.FirstOrDefault() ?? "ул.Пушкина, д.1";
+                            }
+                            catch (Exception ex)
+                            {
+                                DebuggerService.Log(ex);
+                            }
+
+                            await NavigationService.NavigatePopupAsync<AddMarkerPage, AddMarkerVmLink>(new AddMarkerVmLink(e.Point.Latitude, e.Point.Longitude, address));
+
+                            State = PageStateType.Default;
+                        }
+                    };
 
             extendedUserContext.UserContextChanged += (sender, e) => OnPropertyChanged(nameof(CanBecomeVolunteer));
         }
@@ -245,13 +275,6 @@ namespace LeadersOfDigital.ViewModels
             }
 
             MainMap.Pins.Add(await GetNearPin(myPosition));
-
-            await ExceptionHandler.PerformCatchableTask(
-                new ViewModelPerformableAction(
-                    async () =>
-                    {
-                        var p = await _facilitiesLogic.Get(CancellationToken);
-                    }));
 
             State = PageStateType.Default;
 
