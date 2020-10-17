@@ -5,6 +5,7 @@ using LeadersOfDigital.Views;
 using NoTryCatch.Core.Services;
 using NoTryCatch.Xamarin.Portable.Services;
 using NoTryCatch.Xamarin.Portable.Services.PlatformServices;
+using LeadersOfDigital.BusinessLayer;
 
 namespace LeadersOfDigital.Containers
 {
@@ -26,6 +27,9 @@ namespace LeadersOfDigital.Containers
 
             // ViewModels
             builder.RegisterType<MainPViewModel>().AsSelf();
+
+            // BL services
+            builder.RegisterType<GoogleMapsApiLogicService>().As<IGoogleMapsApiLogicService>().SingleInstance();
 
             Container = builder.Build();
 

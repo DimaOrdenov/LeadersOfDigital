@@ -19,6 +19,10 @@
     <PackageReference Include="NoTryCatch.Bl.Core" Version="1.0.0" />
     <PackageReference Include="Resizetizer.NT" Version="0.2.1-ntc" />
     <PackageReference Include="Autofac" Version="6.0.0" />
+    <PackageReference Include="Mobile.BuildTools" Version="1.4.0.638">
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Views\" />
@@ -26,6 +30,10 @@
     <Folder Include="Resources\" />
     <Folder Include="Containers\" />
     <Folder Include="ViewControls\" />
+    <Folder Include="BusinessLayer\" />
+    <Folder Include="Definitions\" />
+    <Folder Include="Definitions\Models\" />
+    <Folder Include="Definitions\Models\GoogleApi\" />
   </ItemGroup>
 
   <ItemGroup>
@@ -35,4 +43,10 @@
     <SharedImage Include="Resources\ic_burger.svg" Resize="False" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="secrets.json">
+      <IncludeInPackage>false</IncludeInPackage>
+    </None>
+  </ItemGroup>
+  
 </Project>
