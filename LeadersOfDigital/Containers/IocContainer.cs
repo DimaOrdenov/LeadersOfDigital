@@ -1,6 +1,4 @@
-﻿using System;
-using Autofac;
-using LeadersOfDigital.Logic;
+﻿using Autofac;
 using LeadersOfDigital.ViewModels;
 using LeadersOfDigital.Views;
 using NoTryCatch.BL.Core;
@@ -9,8 +7,6 @@ using NoTryCatch.Xamarin.Portable.Services;
 using NoTryCatch.Xamarin.Portable.Services.PlatformServices;
 using RestSharp;
 using LeadersOfDigital.BusinessLayer;
-using RestSharp;
-using NoTryCatch.BL.Core;
 
 namespace LeadersOfDigital.Containers
 {

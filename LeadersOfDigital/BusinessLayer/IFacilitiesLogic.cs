@@ -1,7 +1,7 @@
 ﻿using DataModels.Responses;
 using NoTryCatch.BL.Core;
 
-namespace LeadersOfDigital.Logic
+namespace LeadersOfDigital.BusinessLayer
 {
     public interface IFacilitiesLogic : IBaseLogic<FacilityResponse>
     {

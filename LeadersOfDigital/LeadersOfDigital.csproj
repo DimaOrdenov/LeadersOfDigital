@@ -31,7 +31,6 @@
     <Folder Include="Resources\" />
     <Folder Include="Containers\" />
     <Folder Include="ViewControls\" />
-    <Folder Include="BusinessLayer\" />
     <Folder Include="Definitions\" />
     <Folder Include="Definitions\Responses\" />
     <Folder Include="Definitions\Requests\" />

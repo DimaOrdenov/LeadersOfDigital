@@ -2,7 +2,6 @@
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
-using LeadersOfDigital.Logic;
 using LeadersOfDigital.BusinessLayer;
 using GoogleApi = LeadersOfDigital.Definitions.Models.GoogleApi;
 using LeadersOfDigital.ViewControls;

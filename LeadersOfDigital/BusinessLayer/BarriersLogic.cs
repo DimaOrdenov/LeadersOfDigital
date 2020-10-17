@@ -6,7 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace LeadersOfDigital.Logic
+namespace LeadersOfDigital.BusinessLayer
 {
     internal class BarriersLogic : BaseLogic<BarrierResponse>, IBarriersLogic
     {
