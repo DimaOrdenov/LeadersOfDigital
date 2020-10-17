@@ -19,6 +19,16 @@ namespace LeadersOfDigital.Droid.CustomRenderers
 
         public bool OnMarkerClick(Marker marker)
         {
+            if (Element is CustomMap customMap)
+            {
+                customMap.PinClickedCommand?.Execute(new Pin
+                {
+                    Label = marker.Title,
+                    Address = marker.Snippet,
+                    Position = new Position(marker.Position.Latitude, marker.Position.Longitude),
+                });
+            }
+
             return true;
         }
 

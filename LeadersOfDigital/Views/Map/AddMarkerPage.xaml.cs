@@ -15,6 +15,8 @@ namespace LeadersOfDigital.Views.Map
             base.OnAppearing();
 
             addressFieldIcon.SetTintColor(AppColors.Secondary);
+            barrierFieldIcon.SetTintColor(AppColors.Secondary);
+            reasonFieldIcon.SetTintColor(AppColors.Secondary);
         }
     }
 }

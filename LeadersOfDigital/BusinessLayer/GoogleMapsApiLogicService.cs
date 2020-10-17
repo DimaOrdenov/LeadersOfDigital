@@ -26,6 +26,7 @@ namespace LeadersOfDigital.BusinessLayer
             request.AddParameter("mode", googleApiDirectionsRequest.TravelMode);
             request.AddParameter("origin", $"{googleApiDirectionsRequest.Origin.Latitude},{googleApiDirectionsRequest.Origin.Longitude}");
             request.AddParameter("destination", $"{googleApiDirectionsRequest.Destination.Latitude},{googleApiDirectionsRequest.Destination.Longitude}");
+            request.AddParameter("alternatives", $"{googleApiDirectionsRequest.Alternatives}");
             request.AddParameter("key", $"{Secrets.GoogleApiKey}");
 
             return ExecuteAsync<GoogleDirection>(request, token);

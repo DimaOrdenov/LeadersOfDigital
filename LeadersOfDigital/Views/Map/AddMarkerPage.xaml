@@ -74,7 +74,7 @@
                                        Padding="16,8">
                                     <StackLayout Orientation="Horizontal">
 
-                                        <Label Text="ул.Пушкина, д.1"
+                                        <Label Text="{Binding AddMarkerVmLink.Address}"
                                                HorizontalOptions="FillAndExpand" />
 
                                         <ffimageSvg:SvgCachedImage x:Name="addressFieldIcon"
@@ -92,17 +92,17 @@
                                     <StackLayout Orientation="Horizontal"
                                                  Padding="16,8">
                                         <StackLayout.Behaviors>
-                                            <behaviors:FocusElementBehavior ElementToFocus="{x:Reference placePicker}" />
+                                            <behaviors:FocusElementBehavior ElementToFocus="{x:Reference barrierPicker}" />
                                         </StackLayout.Behaviors>
 
-                                        <Label Text="{Binding Source={x:Reference placePicker}, Path=SelectedItem}"
+                                        <Label Text="{Binding SelectedBarrier, TargetNullValue='Выберите барьер'}"
                                                HorizontalOptions="FillAndExpand" />
 
-                                        <ffimageSvg:SvgCachedImage x:Name="placeFieldIcon"
+                                        <ffimageSvg:SvgCachedImage x:Name="barrierFieldIcon"
                                                                    Source="{x:Static local:AppSvgImages.IcChevronLeft}"
-                                                                   Rotation="90"
-                                                                   WidthRequest="24"
-                                                                   HeightRequest="24" />
+                                                                   Rotation="-90"
+                                                                   WidthRequest="16"
+                                                                   HeightRequest="16" />
 
                                     </StackLayout>
                                 </Frame>
@@ -116,65 +116,67 @@
                                             <behaviors:FocusElementBehavior ElementToFocus="{x:Reference reasonPicker}" />
                                         </StackLayout.Behaviors>
 
-                                        <Label Text="{Binding Source={x:Reference reasonPicker}, Path=SelectedItem}"
+                                        <Label Text="{Binding SelectedReason, TargetNullValue='Выберите замечание'}"
                                                HorizontalOptions="FillAndExpand" />
 
                                         <ffimageSvg:SvgCachedImage x:Name="reasonFieldIcon"
                                                                    Source="{x:Static local:AppSvgImages.IcChevronLeft}"
-                                                                   Rotation="90"
-                                                                   WidthRequest="24"
-                                                                   HeightRequest="24" />
+                                                                   Rotation="-90"
+                                                                   WidthRequest="16"
+                                                                   HeightRequest="16" />
 
                                     </StackLayout>
                                 </Frame>
 
                                 <Frame CornerRadius="8"
                                        BackgroundColor="{x:Static local:AppColors.BgMain}"
-                                       Margin="0,24,0,0">
+                                       Margin="0,24,0,0"
+                                       Padding="12,8">
 
                                     <ntcViewcontrols:BaseEditor Text="{Binding Comment}"
-                                                                HorizontalOptions="FillAndExpand" />
+                                                                AutoSize="TextChanges"
+                                                                HorizontalOptions="FillAndExpand"
+                                                                BackgroundColor="Transparent" />
                                 </Frame>
 
                                 <Label Text="Прикрепляемые фото"
+                                       FontAttributes="Bold"
                                        Margin="0,32,0,0" />
 
-                                <StackLayout Orientation="Horizontal">
-                                    <StackLayout Orientation="Horizontal"
-                                                 BindableLayout.ItemsSource="{Binding PhotosCollection}">
-                                        <BindableLayout.ItemTemplate>
-                                            <DataTemplate>
-                                                <Frame CornerRadius="8">
-                                                    <Image Source="{Binding .}"
-                                                           WidthRequest="80"
-                                                           HeightRequest="80" />
-                                                </Frame>
-                                            </DataTemplate>
-                                        </BindableLayout.ItemTemplate>
-                                    </StackLayout>
+                                <Frame CornerRadius="8"
+                                       IsVisible="{Binding HasPhoto}"
+                                       Margin="0,16,0,0"
+                                       HorizontalOptions="Start">
+                                    <Image Source="{Binding Photo}"
+                                           WidthRequest="80"
+                                           HeightRequest="80" />
+                                </Frame>
 
-                                    <pancake:PancakeView BorderColor="{x:Static local:AppColors.Primary}"
-                                                         BorderIsDashed="True"
-                                                         BorderDashPattern="8,8"
-                                                         BorderThickness="2"
-                                                         CornerRadius="8"
-                                                         WidthRequest="80"
-                                                         HeightRequest="80">
-                                        <ContentView xameff:TouchEffect.Color="{x:Static local:AppColors.RippleEffectBlack}"
-                                                     xameff:Commands.Tap="{Binding AddPhotoCommand}">
-                                            <Label Text="+"
-                                                   FontAttributes="Bold"
-                                                   FontSize="24"
-                                                   VerticalOptions="Center"
-                                                   HorizontalOptions="Center" />
-                                        </ContentView>
+                                <pancake:PancakeView BorderColor="{x:Static local:AppColors.Secondary}"
+                                                     BorderIsDashed="True"
+                                                     BorderDashPattern="8,8"
+                                                     BorderThickness="2"
+                                                     CornerRadius="8"
+                                                     WidthRequest="80"
+                                                     HeightRequest="80"
+                                                     Margin="0,16,0,0"
+                                                     IsVisible="{Binding HasPhoto, Converter={converters:BoolToNegativeConverter}}"
+                                                     HorizontalOptions="Start">
+                                    <ContentView xameff:TouchEffect.Color="{x:Static local:AppColors.RippleEffectBlack}"
+                                                 xameff:Commands.Tap="{Binding AddPhotoCommand}">
+                                        <Label Text="+"
+                                               FontAttributes="Bold"
+                                               FontSize="30"
+                                               VerticalOptions="Center"
+                                               HorizontalOptions="Center" />
+                                    </ContentView>
 
-                                    </pancake:PancakeView>
-                                </StackLayout>
+                                </pancake:PancakeView>
 
                                 <Button Text="Оставить метку"
-                                        Command="{Binding RegisterMarker}"
-                                        VerticalOptions="End" />
+                                        Command="{Binding RegisterMarkerCommand}"
+                                        Margin="0,24,0,0"
+                                        VerticalOptions="EndAndExpand" />
 
                             </StackLayout>
                         </ScrollView>

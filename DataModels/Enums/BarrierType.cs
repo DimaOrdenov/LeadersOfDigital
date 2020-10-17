@@ -1,7 +1,16 @@
-﻿namespace DataModels.Responses.Enums
+﻿using System.ComponentModel;
+
+namespace DataModels.Responses.Enums
 {
     public enum BarrierType
     {
-        Ladder
+        [Description("Лестница")]
+        Ladder,
+
+        [Description("Бордюр")]
+        Border,
+
+        [Description("Яма")]
+        Hole,
     }
 }

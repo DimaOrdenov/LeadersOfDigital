@@ -20,6 +20,7 @@ using LeadersOfDigital.Definitions.Requests;
 using LeadersOfDigital.ViewModels.VolunteerAccount;
 using LeadersOfDigital.Views.VolunteerAccount;
 using LeadersOfDigital.Views.Map;
+using LeadersOfDigital.Definitions.VmLink;
 
 namespace LeadersOfDigital.ViewModels
 {
@@ -81,7 +82,7 @@ namespace LeadersOfDigital.ViewModels
 
                 if (result)
                 {
-                    MoveToPosition(myPosition);
+                    MoveToPosition(myPosition, Distance.FromKilometers(1));
                 }
 
                 State = PageStateType.Default;
@@ -146,7 +147,6 @@ namespace LeadersOfDigital.ViewModels
                                 await _googleMapsApiLogicService.GetDirections(
                                     new GoogleApiDirectionsRequest
                                     {
-                                        TravelMode = "walking",
                                         Origin = myPosition,
                                         Destination = pin.Position,
                                     },
@@ -167,6 +167,9 @@ namespace LeadersOfDigital.ViewModels
 
                             MainMap.Polylines.Add(polyline);
 
+                            MainMap.MoveToRegion(MapSpan.FromBounds(Bounds.FromPositions(
+                                new List<Position> { positions.First(), positions.Last() })).WithZoom(0.5));
+
                             Destination = pin.Address;
                         }));
 
@@ -178,9 +181,33 @@ namespace LeadersOfDigital.ViewModels
 
             MainMap.MapLongClicked += async (sender, e) =>
             {
-                if (await DialogService.DisplayAlert(string.Empty, $"Добавить маркер в {e.Point.Latitude};{e.Point.Longitude}", "Да", "Нет"))
+                MainMap.MoveToRegion(MapSpan.FromCenterAndRadius(new Position(e.Point.Latitude, e.Point.Longitude), MainMap.VisibleRegion.Radius));
+
+                if (await DialogService.DisplayAlert(
+                    "Дорожное событие",
+                    "Вы можете создать дорожное событие, указав общую проблематику, описать пробему и приложить фотографии",
+                    "Добавить",
+                    "Отмена"))
                 {
-                    await NavigationService.NavigatePopupAsync<AddMarkerPage>();
+                    State = PageStateType.MinorLoading;
+
+                    string address = string.Empty;
+
+                    try
+                    {
+                        Geocoder geocoder = new Geocoder();
+                        IEnumerable<string> addresses = await geocoder.GetAddressesForPositionAsync(e.Point);
+
+                        address = addresses.FirstOrDefault()?.Split("\n")?.FirstOrDefault() ?? "ул.Пушкина, д.1";
+                    }
+                    catch (Exception ex)
+                    {
+                        DebuggerService.Log(ex);
+                    }
+
+                    await NavigationService.NavigatePopupAsync<AddMarkerPage, AddMarkerVmLink>(new AddMarkerVmLink(e.Point.Latitude, e.Point.Longitude, address));
+
+                    State = PageStateType.Default;
                 }
             };
 
@@ -205,25 +232,26 @@ namespace LeadersOfDigital.ViewModels
             {
                 return;
             }
-            var p = await _facilitiesLogic.Get(CancellationToken);
+
             State = PageStateType.MinorLoading;
 
-            MainMap.MoveCamera(CameraUpdateFactory.NewPosition(new Position(55.751314, 37.627335)));
+            await MainMap.MoveCamera(CameraUpdateFactory.NewPositionZoom(new Position(55.751314, 37.627335), 0.5));
 
             (bool result, Position myPosition) = await TryGetUserLocation();
 
             if (result)
             {
-                MoveToPosition(myPosition);
+                MoveToPosition(myPosition, Distance.FromKilometers(6));
             }
 
-            MainMap.Pins.Add(new Pin
-            {
-                Position = new Position(55.751314, 37.627335),
-                Label = "test",
-                Address = "address",
-                //Icon = BitmapDescriptorFactory.FromBundle("ic_pin.png"),
-            });
+            MainMap.Pins.Add(await GetNearPin(myPosition));
+
+            await ExceptionHandler.PerformCatchableTask(
+                new ViewModelPerformableAction(
+                    async () =>
+                    {
+                        var p = await _facilitiesLogic.Get(CancellationToken);
+                    }));
 
             State = PageStateType.Default;
 
@@ -269,9 +297,34 @@ namespace LeadersOfDigital.ViewModels
             return (position != null, position);
         }
 
-        private void MoveToPosition(Position position) =>
+        private void MoveToPosition(Position position, Distance distance) =>
             MainMap.MoveToRegion(
-                MapSpan.FromCenterAndRadius(position, Distance.FromKilometers(6)));
+                MapSpan.FromCenterAndRadius(position, distance));
+
+        private async Task<Pin> GetNearPin(Position myPosition)
+        {
+            Position pinPosition = new Position(myPosition.Latitude + 0.01, myPosition.Longitude + 0.01);
+            string address = string.Empty;
+
+            try
+            {
+                Geocoder geocoder = new Geocoder();
+                IEnumerable<string> addresses = await geocoder.GetAddressesForPositionAsync(pinPosition);
+
+                address = addresses.FirstOrDefault()?.Split("\n")?.FirstOrDefault() ?? "ул.Пушкина, д.1";
+            }
+            catch (Exception ex)
+            {
+                DebuggerService.Log(ex);
+            }
+
+            return new Pin
+            {
+                Label = "Магазин",
+                Address = address,
+                Position = pinPosition,
+            };
+        }
 
         public IEnumerable<Position> Decode(string encodedPoints)
         {

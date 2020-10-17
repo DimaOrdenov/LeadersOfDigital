@@ -7,6 +7,7 @@
                           xmlns:ffimageSvg="clr-namespace:FFImageLoading.Svg.Forms;assembly=FFImageLoading.Svg.Forms"
                           xmlns:xameff="clr-namespace:XamEffects;assembly=XamEffects"
                           xmlns:viewcontrols="clr-namespace:LeadersOfDigital.ViewControls"
+                          xmlns:converters="clr-namespace:NoTryCatch.Xamarin.Portable.Converters;assembly=NoTryCatch.Xamarin.Portable"
                           xmlns:pancake="clr-namespace:Xamarin.Forms.PancakeView;assembly=Xamarin.Forms.PancakeView"
                           x:Class="LeadersOfDigital.Views.MainPage"
                           NavigationPage.HasNavigationBar="False">

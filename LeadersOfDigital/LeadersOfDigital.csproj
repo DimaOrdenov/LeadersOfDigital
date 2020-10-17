@@ -42,6 +42,7 @@
     <Folder Include="ViewModels\Common\" />
     <Folder Include="Views\Map\" />
     <Folder Include="ViewModels\Map\" />
+    <Folder Include="Definitions\VmLink\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\DataModels\DataModels.csproj" />
