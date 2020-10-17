@@ -16,19 +16,27 @@ using NoTryCatch.Xamarin.Portable.ViewModels;
 using Xamarin.Essentials;
 using Xamarin.Forms.GoogleMaps;
 using System.Collections.Generic;
-using System.Text;
+using LeadersOfDigital.Definitions.Requests;
 
 namespace LeadersOfDigital.ViewModels
 {
     public class MainPViewModel : PageViewModel
     {
         private readonly IGoogleMapsApiLogicService _googleMapsApiLogicService;
+        private bool _isRouting;
+        private string _destination;
 
         public ICommand ZoomInCommand { get; }
 
         public ICommand ZoomOutCommand { get; }
 
         public ICommand ShowMeCommand { get; }
+
+        public ICommand GetRouteCommand { get; }
+
+        public ICommand CallVolunteerCommand { get; }
+
+        public ICommand CancelRoutingCommand { get; }
 
         public MainPViewModel(
             INavigationService navigationService,
@@ -68,12 +76,39 @@ namespace LeadersOfDigital.ViewModels
                 State = PageStateType.Default;
             });
 
+            GetRouteCommand = BuildPageVmCommand(async () =>
+            {
+                State = PageStateType.MinorLoading;
+
+                State = PageStateType.Default;
+            });
+
+            CallVolunteerCommand = BuildPageVmCommand(async () =>
+            {
+                State = PageStateType.MinorLoading;
+
+                State = PageStateType.Default;
+            });
+
+            CancelRoutingCommand = BuildPageVmCommand(async () =>
+            {
+                State = PageStateType.MinorLoading;
+
+                MainMap.Polylines.Clear();
+
+                OnPropertyChanged(nameof(IsBuildingRouting));
+
+                State = PageStateType.Default;
+            });
+
             MainMap = new CustomMap
             {
                 IsIndoorEnabled = true,
                 PinClickedCommand = BuildPageVmCommand<Pin>(async pin =>
                 {
                     State = PageStateType.Loading;
+
+                    MainMap.Polylines.Clear();
 
                     await ExceptionHandler.PerformCatchableTask(
                         new ViewModelPerformableAction(async () =>
@@ -86,10 +121,36 @@ namespace LeadersOfDigital.ViewModels
                             }
 
                             GoogleApi.GoogleDirection googleDirection =
-                                await _googleMapsApiLogicService.GetDirections(myPosition.Latitude, myPosition.Longitude, pin.Position.Latitude, pin.Position.Longitude, CancellationToken);
+                                await _googleMapsApiLogicService.GetDirections(
+                                    new GoogleApiDirectionsRequest
+                                    {
+                                        TravelMode = "walking",
+                                        Origin = myPosition,
+                                        Destination = pin.Position,
+                                    },
+                                    CancellationToken);
+
+                            IEnumerable<Position> positions = Decode(googleDirection.Routes.First().OverviewPolyline.Points);
+
+                            Polyline polyline = new Polyline
+                            {
+                                StrokeColor = AppColors.Main,
+                                StrokeWidth = 4,
+                            };
+
+                            foreach (Position position in positions)
+                            {
+                                polyline.Positions.Add(position);
+                            }
+
+                            MainMap.Polylines.Add(polyline);
+
+                            Destination = pin.Address;
                         }));
 
                     State = PageStateType.Default;
+
+                    OnPropertyChanged(nameof(IsBuildingRouting));
                 }),
             };
 
@@ -100,6 +161,14 @@ namespace LeadersOfDigital.ViewModels
         }
 
         public CustomMap MainMap { get; }
+
+        public bool IsBuildingRouting => MainMap?.Polylines?.Count > 0;
+
+        public string Destination
+        {
+            get => _destination;
+            set => SetProperty(ref _destination, value);
+        }
 
         public override async Task OnAppearing()
         {

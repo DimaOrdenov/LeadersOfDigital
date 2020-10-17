@@ -2,6 +2,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 using LeadersOfDigital.Definitions.Models.GoogleApi;
+using LeadersOfDigital.Definitions.Requests;
 using LeadersOfDigital.Helpers;
 using NoTryCatch.BL.Core;
 using NoTryCatch.Core.Services;
@@ -18,14 +19,13 @@ namespace LeadersOfDigital.BusinessLayer
 
         protected override string Route => throw new NotImplementedException("Service not supported for REST requests");
 
-        public Task<GoogleDirection> GetDirections(double originLatitude, double originLongitude, double destinationLatitude, double destinationLongitude, CancellationToken token)
+        public Task<GoogleDirection> GetDirections(GoogleApiDirectionsRequest googleApiDirectionsRequest, CancellationToken token)
         {
             IRestRequest request = new RestRequest("api/directions/json", Method.GET);
 
-            request.AddParameter("mode", "driving");
-            request.AddParameter("transit_routing_preference", "less_driving");
-            request.AddParameter("origin", $"{originLatitude},{originLongitude}");
-            request.AddParameter("destination", $"{destinationLatitude},{destinationLongitude}");
+            request.AddParameter("mode", googleApiDirectionsRequest.TravelMode);
+            request.AddParameter("origin", $"{googleApiDirectionsRequest.Origin.Latitude},{googleApiDirectionsRequest.Origin.Longitude}");
+            request.AddParameter("destination", $"{googleApiDirectionsRequest.Destination.Latitude},{googleApiDirectionsRequest.Destination.Longitude}");
             request.AddParameter("key", $"{Secrets.GoogleApiKey}");
 
             return ExecuteAsync<GoogleDirection>(request, token);

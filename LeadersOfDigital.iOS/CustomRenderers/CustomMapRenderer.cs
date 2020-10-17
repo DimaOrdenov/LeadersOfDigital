@@ -32,6 +32,7 @@ namespace LeadersOfDigital.iOS.CustomRenderers
                 {
                     Position = new Position(marker.Position.Latitude, marker.Position.Longitude),
                     Label = marker.Title,
+                    Address = marker.Snippet,
                 });
             }
 
