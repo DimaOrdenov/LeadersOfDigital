@@ -25,20 +25,17 @@
 
         <ntcViewcontrols:BasePicker x:Name="barrierPicker"
                                     SelectedItem="{Binding SelectedBarrier}"
-                                    Opacity="0">
-            <ntcViewcontrols:BasePicker.Items>
-                <x:String>Бордюр</x:String>
-                <x:String>Ступеньки</x:String>
-            </ntcViewcontrols:BasePicker.Items>
-
-        </ntcViewcontrols:BasePicker>
+                                    Opacity="0" />
 
         <ntcViewcontrols:BasePicker x:Name="reasonPicker"
                                     SelectedItem="{Binding SelectedReason}"
                                     Opacity="0">
             <ntcViewcontrols:BasePicker.Items>
-                <x:String>Плохо</x:String>
-                <x:String>Не очень</x:String>
+                <x:String>Бордюры по краям пешеходных путей: высота более 0,05 м</x:String>
+                <x:String>Подземные и надземные переходы: нет пандуса</x:String>
+                <x:String>Лестница: ширина марша более 1,35 м</x:String>
+                <x:String>Ступени: неровные</x:String>
+                <x:String>Иное (опишите  комментариях)</x:String>
             </ntcViewcontrols:BasePicker.Items>
 
         </ntcViewcontrols:BasePicker>

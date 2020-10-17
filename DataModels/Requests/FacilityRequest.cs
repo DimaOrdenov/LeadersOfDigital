@@ -6,7 +6,7 @@ namespace DataModels.Requests
     {
         public FacilityRequest()
         {
-            Subcategory = Subcategory.Pharmacy;
+            Subcategory = Subcategory.Road;
         }
 
         public int Id { get; set; }

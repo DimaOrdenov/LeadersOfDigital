@@ -1,4 +1,8 @@
-﻿using NoTryCatch.Xamarin.Portable.Extensions;
+﻿using System;
+using System.Linq;
+using DataModels.Responses.Enums;
+using NoTryCatch.Core.Extensions;
+using NoTryCatch.Xamarin.Portable.Extensions;
 using NoTryCatch.Xamarin.Portable.ViewControls;
 
 namespace LeadersOfDigital.Views.Map
@@ -8,6 +12,11 @@ namespace LeadersOfDigital.Views.Map
         public AddMarkerPage()
         {
             InitializeComponent();
+
+            foreach (string barrierType in Enum.GetValues(typeof(BarrierType)).Cast<BarrierType>().Select(x => x.GetEnumDescription()))
+            {
+                barrierPicker.Items.Add(barrierType);
+            }
         }
 
         protected override void OnAppearing()

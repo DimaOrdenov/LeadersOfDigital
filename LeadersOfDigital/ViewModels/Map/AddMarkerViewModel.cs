@@ -70,6 +70,7 @@ namespace LeadersOfDigital.ViewModels.Map
                                         Street = AddMarkerVmLink.Address,
                                         Latitude = AddMarkerVmLink.Latitude,
                                         Longitute = AddMarkerVmLink.Longitute,
+                                        Subcategory = Subcategory.Road,
                                     },
                                     CancellationToken);
 
@@ -90,7 +91,7 @@ namespace LeadersOfDigital.ViewModels.Map
                                 await _barriersLogic.Post(
                                     new BarrierRequest
                                     {
-                                        BarrierType = BarrierType.Ladder,
+                                        BarrierType = BarrierType.Hole,
                                         Facility = new FacilityRequest { Id = facility.FacilityId },
                                         Photo = photo,
                                         Comment = _comment,
