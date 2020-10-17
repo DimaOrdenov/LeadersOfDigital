@@ -31,7 +31,6 @@ namespace LeadersOfDigital.Containers
             // BL
             var RC = new RestClient("http://city-env.eba-j4m8mgch.us-east-2.elasticbeanstalk.com/api");
             builder.RegisterInstance<IRestClient>(RC);
-            builder.RegisterInstance<UserContext>(new UserContext());
             builder.RegisterType<BarriersLogic>().As<IBarriersLogic>().SingleInstance();
             builder.RegisterType<DisabilitiesLogic>().As<IDisabilitiesLogic>().SingleInstance();
             builder.RegisterType<FacilitiesLogic>().As<IFacilitiesLogic>().SingleInstance();
