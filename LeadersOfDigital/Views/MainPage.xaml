@@ -46,68 +46,92 @@
         </viewcontrols:ShadowFrame>
 
         <viewcontrols:ShadowFrame AbsoluteLayout.LayoutFlags="PositionProportional"
-                                  AbsoluteLayout.LayoutBounds="0.97,0.17,-1,-1">
-            <Frame CornerRadius="8">
-                <ContentView xameff:Commands.Tap="{Binding MicCommand}"
-                             xameff:TouchEffect.Color="{x:Static local:AppColors.RippleEffectBlack}"
-                             Padding="14"
-                             BackgroundColor="White">
-                    <ffimageSvg:SvgCachedImage x:Name="micImage"
-                                               Source="{x:Static local:AppSvgImages.IcMic}"
-                                               WidthRequest="24"
-                                               HeightRequest="24" />
-                </ContentView>
-            </Frame>
-        </viewcontrols:ShadowFrame>
-
-        <viewcontrols:ShadowFrame AbsoluteLayout.LayoutFlags="PositionProportional"
                                   AbsoluteLayout.LayoutBounds="0.97,0.4,-1,-1">
-            <Frame CornerRadius="8">
-                <Grid BackgroundColor="White">
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="*" />
-                        <RowDefinition Height="*" />
-                    </Grid.RowDefinitions>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*" />
-                    </Grid.ColumnDefinitions>
+            <StackLayout Spacing="60"
+                         HorizontalOptions="End">
 
-                    <ContentView xameff:Commands.Tap="{Binding ZoomInCommand}"
+                <Frame CornerRadius="8"
+                       HorizontalOptions="End">
+                    <ContentView xameff:Commands.Tap="{Binding MicCommand}"
                                  xameff:TouchEffect.Color="{x:Static local:AppColors.RippleEffectBlack}"
-                                 Padding="14">
-                        <ffimageSvg:SvgCachedImage x:Name="zoomInImage"
-                                                   Source="{x:Static local:AppSvgImages.IcPlus}"
+                                 Padding="14"
+                                 BackgroundColor="White">
+                        <ffimageSvg:SvgCachedImage x:Name="micImage"
+                                                   Source="{x:Static local:AppSvgImages.IcMic}"
                                                    WidthRequest="24"
                                                    HeightRequest="24" />
                     </ContentView>
+                </Frame>
 
-                    <ContentView Grid.Row="1"
-                                 xameff:Commands.Tap="{Binding ZoomOutCommand}"
+                <Frame CornerRadius="8"
+                       HorizontalOptions="End">
+                    <Grid BackgroundColor="White">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*" />
+                            <RowDefinition Height="*" />
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+
+                        <ContentView xameff:Commands.Tap="{Binding ZoomInCommand}"
+                                     xameff:TouchEffect.Color="{x:Static local:AppColors.RippleEffectBlack}"
+                                     Padding="14">
+                            <ffimageSvg:SvgCachedImage x:Name="zoomInImage"
+                                                       Source="{x:Static local:AppSvgImages.IcPlus}"
+                                                       WidthRequest="24"
+                                                       HeightRequest="24" />
+                        </ContentView>
+
+                        <ContentView Grid.Row="1"
+                                     xameff:Commands.Tap="{Binding ZoomOutCommand}"
+                                     xameff:TouchEffect.Color="{x:Static local:AppColors.RippleEffectBlack}"
+                                     Padding="14">
+                            <ffimageSvg:SvgCachedImage x:Name="zoomOutImage"
+                                                       Source="{x:Static local:AppSvgImages.IcMinus}"
+                                                       WidthRequest="24"
+                                                       HeightRequest="24" />
+                        </ContentView>
+                    </Grid>
+                </Frame>
+
+                <Frame CornerRadius="8"
+                       HorizontalOptions="End">
+                    <ContentView xameff:Commands.Tap="{Binding ShowMeCommand}"
                                  xameff:TouchEffect.Color="{x:Static local:AppColors.RippleEffectBlack}"
-                                 Padding="14">
-                        <ffimageSvg:SvgCachedImage x:Name="zoomOutImage"
-                                                   Source="{x:Static local:AppSvgImages.IcMinus}"
+                                 Padding="14"
+                                 BackgroundColor="White">
+                        <ffimageSvg:SvgCachedImage x:Name="showMeImage"
+                                                   Source="{x:Static local:AppSvgImages.IcNavigation}"
                                                    WidthRequest="24"
                                                    HeightRequest="24" />
                     </ContentView>
-                </Grid>
-            </Frame>
+                </Frame>
+
+            </StackLayout>
         </viewcontrols:ShadowFrame>
 
-        <viewcontrols:ShadowFrame AbsoluteLayout.LayoutFlags="PositionProportional"
-                                  AbsoluteLayout.LayoutBounds="0.97,0.63,-1,-1">
-            <Frame CornerRadius="8">
-                <ContentView xameff:Commands.Tap="{Binding ShowMeCommand}"
-                             xameff:TouchEffect.Color="{x:Static local:AppColors.RippleEffectBlack}"
-                             Padding="14"
-                             BackgroundColor="White">
-                    <ffimageSvg:SvgCachedImage x:Name="showMeImage"
-                                               Source="{x:Static local:AppSvgImages.IcNavigation}"
-                                               WidthRequest="24"
-                                               HeightRequest="24" />
-                </ContentView>
-            </Frame>
-        </viewcontrols:ShadowFrame>
+        <Frame AbsoluteLayout.LayoutFlags="PositionProportional"
+               AbsoluteLayout.LayoutBounds="0.05,0.97,-1,-1"
+               CornerRadius="8"
+               BackgroundColor="{x:Static local:AppColors.Main}"
+               IsVisible="{Binding CanBecomeVolunteer}">
+            <StackLayout Orientation="Horizontal"
+                         Spacing="10"
+                         Padding="16,8"
+                         xameff:Commands.Tap="{Binding BecomeVolunteerCommand}"
+                         xameff:TouchEffect.Color="{x:Static local:AppColors.RippleEffectWhite}">
+
+                <ffimageSvg:SvgCachedImage Source="{x:Static local:AppSvgImages.IcHeart}"
+                                           WidthRequest="24"
+                                           HeightRequest="24" />
+
+                <Label TextColor="#FFFFFF"
+                       VerticalOptions="Center"
+                       Text="Стать волонтером" />
+
+            </StackLayout>
+        </Frame>
 
         <viewcontrols:ShadowFrame AbsoluteLayout.LayoutFlags="PositionProportional,WidthProportional"
                                   AbsoluteLayout.LayoutBounds="0,1,1,-1"
@@ -118,9 +142,10 @@
                 <ScrollView>
                     <StackLayout Padding="12,16,12,40">
                         <StackLayout Orientation="Horizontal"
-                                     Spacing="12">
+                                     Spacing="12"
+                                     HorizontalOptions="FillAndExpand">
 
-                            <StackLayout>
+                            <StackLayout HorizontalOptions="FillAndExpand">
 
                                 <Grid ColumnSpacing="6">
                                     <Grid.ColumnDefinitions>
@@ -140,7 +165,7 @@
 
                                 <BoxView HeightRequest="1"
                                          Margin="0,16,0,0"
-                                         Color="#EBEBF0" />
+                                         Color="{x:Static local:AppColors.PaleGray}" />
 
                                 <Grid ColumnSpacing="6"
                                       Margin="0,16,0,0">
@@ -165,7 +190,8 @@
                                          xameff:TouchEffect.Color="{x:Static local:AppColors.RippleEffectWhite}"
                                          Padding="6"
                                          BackgroundColor="White"
-                                         VerticalOptions="Start">
+                                         VerticalOptions="Start"
+                                         HorizontalOptions="End">
                                 <ffimageSvg:SvgCachedImage Source="{x:Static local:AppSvgImages.IcClose}"
                                                            WidthRequest="24"
                                                            HeightRequest="24" />
@@ -183,12 +209,12 @@
                                          Spacing="24">
 
                                 <Frame CornerRadius="8"
-                                       BackgroundColor="{x:Static local:AppColors.Main}"
-                                       Padding="16,8">
+                                       BackgroundColor="{x:Static local:AppColors.Main}">
                                     <StackLayout Orientation="Horizontal"
                                                  Spacing="10"
+                                                 Padding="16,8"
                                                  xameff:Commands.Tap="{Binding GetRouteCommand}"
-                                                 xameff:TouchEffect.Color="{x:Static local:AppColors.RippleEffectBlack}">
+                                                 xameff:TouchEffect.Color="{x:Static local:AppColors.RippleEffectWhite}">
 
                                         <ffimageSvg:SvgCachedImage Source="{x:Static local:AppSvgImages.IcRoute}"
                                                                    WidthRequest="24"
@@ -208,12 +234,12 @@
                                 </Frame>
 
                                 <Frame CornerRadius="8"
-                                       BackgroundColor="{x:Static local:AppColors.BgMain}"
-                                       Padding="16,8">
+                                       BackgroundColor="{x:Static local:AppColors.BgMain}">
                                     <StackLayout Orientation="Horizontal"
                                                  Spacing="10"
+                                                 Padding="16,8"
                                                  xameff:Commands.Tap="{Binding CallVolunteerCommand}"
-                                                 xameff:TouchEffect.Color="{x:Static local:AppColors.RippleEffectBlack}">
+                                                 xameff:TouchEffect.Color="{x:Static local:AppColors.RippleEffectWhite}">
 
                                         <ffimageSvg:SvgCachedImage x:Name="callVolunteerImage"
                                                                    Source="{x:Static local:AppSvgImages.IcSmile}"

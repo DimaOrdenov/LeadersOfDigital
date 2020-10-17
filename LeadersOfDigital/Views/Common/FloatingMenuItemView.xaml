@@ -1,0 +1,40 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<ContentView xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="LeadersOfDigital.Views.Common.FloatingMenuItemView"
+             xmlns:sys="clr-namespace:System;assembly=mscorlib"
+             xmlns:local="clr-namespace:LeadersOfDigital"
+             xmlns:ffimageSvg="clr-namespace:FFImageLoading.Svg.Forms;assembly=FFImageLoading.Svg.Forms"
+             xmlns:xameff="clr-namespace:XamEffects;assembly=XamEffects"
+             xmlns:ntcViewcontrols="clr-namespace:NoTryCatch.Xamarin.Portable.ViewControls;assembly=NoTryCatch.Xamarin.Portable"
+             xmlns:viewcontrols="clr-namespace:LeadersOfDigital.ViewControls"
+             xmlns:converters="clr-namespace:NoTryCatch.Xamarin.Portable.Converters;assembly=NoTryCatch.Xamarin.Portable">
+
+    <Frame CornerRadius="8"
+           BackgroundColor="{x:Static local:AppColors.PaleGray}">
+        <Frame.Triggers>
+            <DataTrigger TargetType="Frame"
+                         Binding="{Binding IsActive}"
+                         Value="True">
+                <Setter Property="BackgroundColor"
+                        Value="{x:Static local:AppColors.Main}" />
+            </DataTrigger>
+        </Frame.Triggers>
+        <ContentView xameff:Commands.Tap="{Binding TapCommand}"
+                     xameff:Commands.TapParameter="{Binding .}"
+                     xameff:TouchEffect.Color="{x:Static local:AppColors.RippleEffectBlack}"
+                     Padding="16,8">
+            <Label Text="{Binding Title}">
+                <Label.Triggers>
+                    <DataTrigger TargetType="Label"
+                                 Binding="{Binding IsActive}"
+                                 Value="True">
+                        <Setter Property="TextColor"
+                                Value="White" />
+                    </DataTrigger>
+                </Label.Triggers>
+            </Label>
+        </ContentView>
+    </Frame>
+
+</ContentView>

@@ -26,5 +26,13 @@ namespace LeadersOfDigital
         public static SvgImageSource IcSmile => SvgImageSource.FromFile("ic_smile.svg");
 
         public static SvgImageSource IcRoute => SvgImageSource.FromFile("ic_route.svg");
+
+        public static SvgImageSource IcAchievement1 => SvgImageSource.FromFile("ic_achievement_1.svg");
+
+        public static SvgImageSource IcAchievement2 => SvgImageSource.FromFile("ic_achievement_2.svg");
+
+        public static SvgImageSource IcStar => SvgImageSource.FromFile("ic_star.svg");
+
+        public static SvgImageSource IcUser => SvgImageSource.FromFile("ic_user.svg");
     }
 }

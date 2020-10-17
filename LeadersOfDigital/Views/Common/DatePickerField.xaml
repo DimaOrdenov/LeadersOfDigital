@@ -1,0 +1,46 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<ContentView xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="LeadersOfDigital.Views.Common.DatePickerField"
+             xmlns:sys="clr-namespace:System;assembly=mscorlib"
+             xmlns:local="clr-namespace:LeadersOfDigital"
+             xmlns:ffimageSvg="clr-namespace:FFImageLoading.Svg.Forms;assembly=FFImageLoading.Svg.Forms"
+             xmlns:xameff="clr-namespace:XamEffects;assembly=XamEffects"
+             xmlns:ntcViewcontrols="clr-namespace:NoTryCatch.Xamarin.Portable.ViewControls;assembly=NoTryCatch.Xamarin.Portable"
+             xmlns:behaviors="clr-namespace:LeadersOfDigital.Behaviors"
+             xmlns:viewcontrols="clr-namespace:LeadersOfDigital.ViewControls"
+             xmlns:converters="clr-namespace:NoTryCatch.Xamarin.Portable.Converters;assembly=NoTryCatch.Xamarin.Portable"
+             x:Name="this">
+
+    <Frame CornerRadius="8"
+           BackgroundColor="{x:Static local:AppColors.BgMain}">
+
+        <AbsoluteLayout Padding="16,0">
+
+            <AbsoluteLayout.Behaviors>
+                <behaviors:FocusElementBehavior ElementToFocus="{x:Reference datePicker}" />
+            </AbsoluteLayout.Behaviors>
+
+            <ntcViewcontrols:BaseDatePicker x:Name="datePicker"
+                                            Date="{Binding Date, Source={x:Reference this}}"
+                                            DateSelectedCommand="{Binding DateSelectedCommand, Source={x:Reference this}}"
+                                            Opacity="0" />
+
+            <Label Text="{Binding Date, StringFormat='{0:dd.MM.yyyy}'}"
+                   AbsoluteLayout.LayoutFlags="PositionProportional"
+                   AbsoluteLayout.LayoutBounds="0,0,-1,-1">
+                <Label.Triggers>
+                    <DataTrigger TargetType="Label"
+                                 Binding="{Binding Date, Source={x:Reference this}}"
+                                 Value="{x:Static sys:DateTime.MinValue}">
+                        <Setter Property="Text"
+                                Value="{Binding Placeholder, Source={x:Reference this}}" />
+                    </DataTrigger>
+                </Label.Triggers>
+            </Label>
+
+        </AbsoluteLayout>
+
+    </Frame>
+
+</ContentView>

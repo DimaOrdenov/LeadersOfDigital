@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using Newtonsoft.Json;
 
-namespace LeadersOfDigital.Definitions.Models.GoogleApi
+namespace LeadersOfDigital.Definitions.Responses.GoogleApi
 {
     public class Leg
     {

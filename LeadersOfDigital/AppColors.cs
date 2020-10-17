@@ -12,6 +12,8 @@ namespace LeadersOfDigital
 
         public static Color BgWhite => Color.FromHex("#FFFFFF");
 
+        public static Color PaleGray => Color.FromHex("#EBEBF0");
+
         public static Color RippleEffectWhite => Color.FromHex("#52FFFFFF");
 
         public static Color RippleEffectBlack => Color.FromHex("#52000000");

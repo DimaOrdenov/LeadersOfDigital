@@ -43,7 +43,12 @@
             <Style TargetType="Entry"
                    ApplyToDerivedTypes="True" />
             <Style TargetType="Button"
-                   ApplyToDerivedTypes="True" />
+                   ApplyToDerivedTypes="True">
+                <Setter Property="TextColor"
+                        Value="White" />
+                <Setter Property="BackgroundColor"
+                        Value="{x:Static local:AppColors.Main}" />
+            </Style>
         </ResourceDictionary>
     </Application.Resources>
 

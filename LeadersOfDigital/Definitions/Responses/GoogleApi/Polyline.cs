@@ -1,5 +1,5 @@
 ﻿using System;
-namespace LeadersOfDigital.Definitions.Models.GoogleApi
+namespace LeadersOfDigital.Definitions.Responses.GoogleApi
 {
     public class Polyline
     {

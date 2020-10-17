@@ -1,5 +1,5 @@
 ﻿using System;
-using LeadersOfDigital.Definitions.Models.GoogleApi;
+using LeadersOfDigital.Definitions.Responses.GoogleApi;
 using System.Threading.Tasks;
 using System.Threading;
 using LeadersOfDigital.Definitions.Requests;

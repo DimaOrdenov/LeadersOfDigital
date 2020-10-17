@@ -3,7 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using LeadersOfDigital.BusinessLayer;
-using GoogleApi = LeadersOfDigital.Definitions.Models.GoogleApi;
+using GoogleApi = LeadersOfDigital.Definitions.Responses.GoogleApi;
 using LeadersOfDigital.ViewControls;
 using NoTryCatch.BL.Core.Exceptions;
 using NoTryCatch.BL.Core.Enums;
@@ -17,13 +17,16 @@ using Xamarin.Essentials;
 using Xamarin.Forms.GoogleMaps;
 using System.Collections.Generic;
 using LeadersOfDigital.Definitions.Requests;
+using LeadersOfDigital.ViewModels.VolunteerAccount;
+using LeadersOfDigital.Views.VolunteerAccount;
 
 namespace LeadersOfDigital.ViewModels
 {
     public class MainPViewModel : PageViewModel
     {
         private readonly IGoogleMapsApiLogicService _googleMapsApiLogicService;
-        private bool _isRouting;
+        private readonly ExtendedUserContext _extendedUserContext;
+
         private string _destination;
 
         public ICommand ZoomInCommand { get; }
@@ -38,15 +41,19 @@ namespace LeadersOfDigital.ViewModels
 
         public ICommand CancelRoutingCommand { get; }
 
+        public ICommand BecomeVolunteerCommand { get; }
+
         public MainPViewModel(
             INavigationService navigationService,
             IDialogService dialogService,
             IDebuggerService debuggerService,
             IExceptionHandler exceptionHandler,
-            IGoogleMapsApiLogicService googleMapsApiLogicService)
+            IGoogleMapsApiLogicService googleMapsApiLogicService,
+            ExtendedUserContext extendedUserContext)
             : base(navigationService, dialogService, debuggerService, exceptionHandler)
         {
             _googleMapsApiLogicService = googleMapsApiLogicService;
+            _extendedUserContext = extendedUserContext;
 
             ZoomInCommand = BuildPageVmCommand(() =>
             {
@@ -100,6 +107,17 @@ namespace LeadersOfDigital.ViewModels
 
                 State = PageStateType.Default;
             });
+
+            BecomeVolunteerCommand = BuildPageVmCommand(
+                async () =>
+                {
+                    State = PageStateType.MinorLoading;
+
+                    await NavigationService.NavigatePopupAsync<VolounteerRegistrationPage>();
+
+                    State = PageStateType.Default;
+                },
+                () => true);
 
             MainMap = new CustomMap
             {
@@ -158,11 +176,15 @@ namespace LeadersOfDigital.ViewModels
             {
                 await DialogService.DisplayAlert(string.Empty, $"Добавить маркер в {e.Point.Latitude};{e.Point.Longitude}", "Да", "Нет");
             };
+
+            extendedUserContext.UserContextChanged += (sender, e) => OnPropertyChanged(nameof(CanBecomeVolunteer));
         }
 
         public CustomMap MainMap { get; }
 
         public bool IsBuildingRouting => MainMap?.Polylines?.Count > 0;
+
+        public bool CanBecomeVolunteer => string.IsNullOrEmpty(_extendedUserContext.FirstName) || string.IsNullOrEmpty(_extendedUserContext.SecondName);
 
         public string Destination
         {

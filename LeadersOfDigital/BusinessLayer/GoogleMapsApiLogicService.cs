@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
-using LeadersOfDigital.Definitions.Models.GoogleApi;
+using LeadersOfDigital.Definitions.Responses.GoogleApi;
 using LeadersOfDigital.Definitions.Requests;
 using LeadersOfDigital.Helpers;
 using NoTryCatch.BL.Core;

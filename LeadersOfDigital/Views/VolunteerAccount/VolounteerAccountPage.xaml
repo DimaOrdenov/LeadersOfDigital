@@ -1,0 +1,339 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<ntcViewcontrols:BasePopupPage xmlns="http://xamarin.com/schemas/2014/forms"
+                               xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                               x:Class="LeadersOfDigital.Views.VolunteerAccount.VolounteerAccountPage"
+                               xmlns:sys="clr-namespace:System;assembly=mscorlib"
+                               xmlns:local="clr-namespace:LeadersOfDigital"
+                               xmlns:ffimageSvg="clr-namespace:FFImageLoading.Svg.Forms;assembly=FFImageLoading.Svg.Forms"
+                               xmlns:xameff="clr-namespace:XamEffects;assembly=XamEffects"
+                               xmlns:ntcViewcontrols="clr-namespace:NoTryCatch.Xamarin.Portable.ViewControls;assembly=NoTryCatch.Xamarin.Portable"
+                               xmlns:viewcontrols="clr-namespace:LeadersOfDigital.ViewControls"
+                               xmlns:commonViews="clr-namespace:LeadersOfDigital.Views.Common"
+                               xmlns:converters="clr-namespace:NoTryCatch.Xamarin.Portable.Converters;assembly=NoTryCatch.Xamarin.Portable"
+                               xmlns:pancake="clr-namespace:Xamarin.Forms.PancakeView;assembly=Xamarin.Forms.PancakeView"
+                               xmlns:popupAnimations="clr-namespace:Rg.Plugins.Popup.Animations;assembly=Rg.Plugins.Popup"
+                               BackgroundColor="Transparent"
+                               Padding="0,44,0,0">
+
+    <ntcViewcontrols:BasePopupPage.Animation>
+        <popupAnimations:MoveAnimation PositionIn="Bottom"
+                                       PositionOut="Bottom" />
+    </ntcViewcontrols:BasePopupPage.Animation>
+
+    <viewcontrols:BaseLayout>
+        <viewcontrols:BaseLayout.Content>
+            <viewcontrols:ShadowFrame>
+                <pancake:PancakeView CornerRadius="20,20,0,0"
+                                     BackgroundColor="White">
+                    <StackLayout>
+
+                        <StackLayout Orientation="Horizontal"
+                                     Padding="12,24,12,0">
+
+                            <Label Text="Личный кабинет пользователя"
+                                   HorizontalOptions="StartAndExpand"
+                                   VerticalOptions="Center"
+                                   FontAttributes="Bold" />
+
+                            <ContentView xameff:Commands.Tap="{Binding NavigateBackCommand}"
+                                         VerticalOptions="Center">
+                                <ffimageSvg:SvgCachedImage Source="{x:Static local:AppSvgImages.IcClose}"
+                                                           WidthRequest="24"
+                                                           HeightRequest="24" />
+                            </ContentView>
+
+                        </StackLayout>
+
+                        <ScrollView>
+                            <StackLayout Padding="12,24,12,40">
+
+                                <Grid ColumnSpacing="18">
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="*" />
+                                    </Grid.RowDefinitions>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="60" />
+                                        <ColumnDefinition Width="*" />
+                                    </Grid.ColumnDefinitions>
+
+                                    <Frame CornerRadius="30">
+                                        <Image Source="{x:Static local:AppImages.ImageVolounteer}" />
+                                    </Frame>
+
+                                    <StackLayout Grid.Column="1">
+
+                                        <Label Text="{Binding FullName}"
+                                               FontSize="22"
+                                               FontAttributes="Bold" />
+
+                                        <Grid Margin="0,4,0,0"
+                                              ColumnSpacing="8">
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition Height="*" />
+                                            </Grid.RowDefinitions>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="16" />
+                                                <ColumnDefinition Width="16" />
+                                                <ColumnDefinition Width="16" />
+                                                <ColumnDefinition Width="16" />
+                                                <ColumnDefinition Width="16" />
+                                            </Grid.ColumnDefinitions>
+
+                                            <ffimageSvg:SvgCachedImage x:Name="star1"
+                                                                       Source="{x:Static local:AppSvgImages.IcStar}"
+                                                                       WidthRequest="16"
+                                                                       HeightRequest="16" />
+
+                                            <ffimageSvg:SvgCachedImage x:Name="star2"
+                                                                       Grid.Column="1"
+                                                                       Source="{x:Static local:AppSvgImages.IcStar}"
+                                                                       WidthRequest="16"
+                                                                       HeightRequest="16" />
+
+                                            <ffimageSvg:SvgCachedImage x:Name="star3"
+                                                                       Grid.Column="2"
+                                                                       Source="{x:Static local:AppSvgImages.IcStar}"
+                                                                       WidthRequest="16"
+                                                                       HeightRequest="16" />
+
+                                            <ffimageSvg:SvgCachedImage x:Name="star4"
+                                                                       Grid.Column="3"
+                                                                       Source="{x:Static local:AppSvgImages.IcStar}"
+                                                                       WidthRequest="16"
+                                                                       HeightRequest="16" />
+
+                                            <ffimageSvg:SvgCachedImage x:Name="star5"
+                                                                       Grid.Column="4"
+                                                                       Source="{x:Static local:AppSvgImages.IcStar}"
+                                                                       WidthRequest="16"
+                                                                       HeightRequest="16" />
+                                        </Grid>
+
+                                        <Label Text="Вы оказали помощь: 24 раза"
+                                               FontSize="14"
+                                               Margin="0,8,0,0" />
+
+                                    </StackLayout>
+
+                                </Grid>
+
+                                <Label Text="Ваши награды"
+                                       FontAttributes="Bold"
+                                       Margin="0,32,0,0" />
+
+                                <StackLayout Orientation="Horizontal"
+                                             Spacing="16"
+                                             Margin="0,16,0,0">
+
+                                    <Frame CornerRadius="4"
+                                           BackgroundColor="{x:Static local:AppColors.Secondary}"
+                                           Padding="8,4">
+                                        <StackLayout Orientation="Horizontal">
+
+                                            <ffimageSvg:SvgCachedImage Source="{x:Static local:AppSvgImages.IcAchievement1}"
+                                                                       WidthRequest="24"
+                                                                       HeightRequest="24" />
+
+                                            <Label TextColor="White">
+                                                <Label.FormattedText>
+                                                    <FormattedString>
+                                                        <Span Text="Покорение" />
+                                                        <Span Text="{x:Static sys:Environment.NewLine}" />
+                                                        <Span Text="вершины" />
+                                                    </FormattedString>
+                                                </Label.FormattedText>
+                                            </Label>
+
+                                        </StackLayout>
+                                    </Frame>
+
+                                    <Frame CornerRadius="4"
+                                           BackgroundColor="{x:Static local:AppColors.Secondary}"
+                                           Padding="8,4">
+                                        <StackLayout Orientation="Horizontal">
+
+                                            <ffimageSvg:SvgCachedImage Source="{x:Static local:AppSvgImages.IcAchievement2}"
+                                                                       WidthRequest="24"
+                                                                       HeightRequest="24" />
+
+                                            <Label TextColor="White">
+                                                <Label.FormattedText>
+                                                    <FormattedString>
+                                                        <Span Text="Первый" />
+                                                        <Span Text="{x:Static sys:Environment.NewLine}" />
+                                                        <Span Text="среди первых" />
+                                                    </FormattedString>
+                                                </Label.FormattedText>
+                                            </Label>
+
+                                        </StackLayout>
+                                    </Frame>
+
+                                </StackLayout>
+
+                                <BoxView HeightRequest="1"
+                                         Color="{x:Static local:AppColors.PaleGray}"
+                                         Margin="0,24,0,0" />
+
+                                <ScrollView Orientation="Horizontal"
+                                            Margin="-12,24,-12,0"
+                                            HorizontalScrollBarVisibility="Never">
+                                    <StackLayout Orientation="Horizontal"
+                                                 Spacing="16"
+                                                 Padding="12,0"
+                                                 BindableLayout.ItemsSource="{Binding MenuItemsCollection}">
+
+                                        <BindableLayout.ItemTemplate>
+                                            <DataTemplate>
+                                                <commonViews:FloatingMenuItemView />
+                                            </DataTemplate>
+                                        </BindableLayout.ItemTemplate>
+
+                                    </StackLayout>
+                                </ScrollView>
+
+                                <StackLayout IsVisible="{Binding IsMainVisible}">
+
+                                    <Label Text="Ждут помощи"
+                                           FontAttributes="Bold"
+                                           Margin="0,32,0,0" />
+
+                                    <StackLayout Margin="0,16,0,0"
+                                                 Spacing="16"
+                                                 BindableLayout.ItemsSource="{Binding NeedHelpItemsCollection}">
+                                        <BindableLayout.ItemTemplate>
+                                            <DataTemplate>
+                                                <StackLayout>
+                                                    <Label Text="{Binding FullName}"
+                                                           FontAttributes="Bold"
+                                                           FontSize="22" />
+
+                                                    <Label Text="{Binding Description}"
+                                                           FontSize="14"
+                                                           Margin="0,6,0,0" />
+
+                                                    <Label Text="{Binding FromAddress, StringFormat='Откуда: {0}'}"
+                                                           FontSize="14"
+                                                           Margin="0,16,0,0" />
+
+                                                    <Label Text="{Binding ToAddress, StringFormat='Куда: {0}'}"
+                                                           FontSize="14"
+                                                           Margin="0,8,0,0" />
+
+                                                    <Label Text="{Binding PlannedAt, StringFormat='Когда: {0:dd.MM.yyyy HH:mm}'}"
+                                                           FontSize="14"
+                                                           Margin="0,8,0,0" />
+
+                                                    <BoxView HeightRequest="1"
+                                                             Color="{x:Static local:AppColors.PaleGray}"
+                                                             Margin="0,16,0,0"
+                                                             IsVisible="{Binding IsLast, Converter={converters:BoolToNegativeConverter}}" />
+
+                                                </StackLayout>
+                                            </DataTemplate>
+                                        </BindableLayout.ItemTemplate>
+                                    </StackLayout>
+
+                                </StackLayout>
+
+                                <StackLayout IsVisible="{Binding IsMarketVisible}">
+
+                                    <Label Text="Где можно потратить бонусы"
+                                           FontAttributes="Bold"
+                                           Margin="0,32,0,0" />
+
+                                    <StackLayout Margin="0,16,0,0"
+                                                 Spacing="12"
+                                                 BindableLayout.ItemsSource="{Binding MarketItemsCollection}">
+                                        <BindableLayout.ItemTemplate>
+                                            <DataTemplate>
+                                                <Grid ColumnSpacing="12">
+                                                    <Grid.RowDefinitions>
+                                                        <RowDefinition Height="100" />
+                                                    </Grid.RowDefinitions>
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition Width="*" />
+                                                        <ColumnDefinition Width="*" />
+                                                    </Grid.ColumnDefinitions>
+
+                                                    <viewcontrols:ShadowFrame>
+                                                        <Frame CornerRadius="8"
+                                                               BackgroundColor="White"
+                                                               Padding="28,12">
+
+                                                            <Image Source="{Binding Item1}" />
+
+                                                        </Frame>
+                                                    </viewcontrols:ShadowFrame>
+
+                                                    <viewcontrols:ShadowFrame Grid.Column="1">
+                                                        <Frame CornerRadius="8"
+                                                               BackgroundColor="White"
+                                                               Padding="28,12">
+
+                                                            <Image Source="{Binding Item2}" />
+
+                                                        </Frame>
+                                                    </viewcontrols:ShadowFrame>
+
+                                                </Grid>
+
+                                            </DataTemplate>
+                                        </BindableLayout.ItemTemplate>
+                                    </StackLayout>
+
+                                </StackLayout>
+
+                                <StackLayout IsVisible="{Binding IsMadeHelpVisible}">
+
+                                    <Label Text="История оказанной помощи"
+                                           FontAttributes="Bold"
+                                           Margin="0,32,0,0" />
+
+                                    <StackLayout Margin="0,16,0,0"
+                                                 Spacing="16"
+                                                 BindableLayout.ItemsSource="{Binding MadeHelpItemsCollection}">
+                                        <BindableLayout.ItemTemplate>
+                                            <DataTemplate>
+                                                <StackLayout>
+                                                    <Label Text="{Binding FullName}"
+                                                           FontAttributes="Bold"
+                                                           FontSize="22" />
+
+                                                    <Label Text="{Binding Description}"
+                                                           FontSize="14"
+                                                           Margin="0,6,0,0" />
+
+                                                    <Label Text="{Binding FromAddress, StringFormat='Откуда: {0}'}"
+                                                           FontSize="14"
+                                                           Margin="0,16,0,0" />
+
+                                                    <Label Text="{Binding ToAddress, StringFormat='Куда: {0}'}"
+                                                           FontSize="14"
+                                                           Margin="0,16,0,0" />
+
+                                                    <Label Text="{Binding PlannedAt, StringFormat='Когда: {0:dd.MM.yyyy HH:mm}'}"
+                                                           FontSize="14"
+                                                           Margin="0,16,0,0" />
+
+                                                    <BoxView HeightRequest="1"
+                                                             Color="{x:Static local:AppColors.PaleGray}"
+                                                             Margin="0,16,0,0"
+                                                             IsVisible="{Binding IsLast, Converter={converters:BoolToNegativeConverter}}" />
+
+                                                </StackLayout>
+                                            </DataTemplate>
+                                        </BindableLayout.ItemTemplate>
+                                    </StackLayout>
+
+                                </StackLayout>
+
+                            </StackLayout>
+                        </ScrollView>
+                    </StackLayout>
+                </pancake:PancakeView>
+            </viewcontrols:ShadowFrame>
+        </viewcontrols:BaseLayout.Content>
+    </viewcontrols:BaseLayout>
+
+</ntcViewcontrols:BasePopupPage>

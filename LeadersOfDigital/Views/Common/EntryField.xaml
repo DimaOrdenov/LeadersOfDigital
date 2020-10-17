@@ -1,0 +1,17 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<ContentView xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="LeadersOfDigital.Views.Common.EntryField"
+             xmlns:local="clr-namespace:LeadersOfDigital"
+             x:Name="this">
+
+    <Frame CornerRadius="8"
+           BackgroundColor="{x:Static local:AppColors.BgMain}"
+           Padding="16,8">
+
+        <Entry Text="{Binding Text, Source={x:Reference this}}"
+               Placeholder="{Binding Placeholder, Source={x:Reference this}}" />
+
+    </Frame>
+
+</ContentView>
