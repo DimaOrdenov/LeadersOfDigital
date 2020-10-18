@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using Google.Maps;
 using LeadersOfDigital.ViewControls;
@@ -14,6 +15,8 @@ namespace LeadersOfDigital.iOS.CustomRenderers
 {
     public class CustomMapRenderer : MapRenderer
     {
+        private IEnumerable<CustomPin> _customPins;
+
         protected override void OnElementChanged(ElementChangedEventArgs<View> e)
         {
             base.OnElementChanged(e);
@@ -22,13 +25,18 @@ namespace LeadersOfDigital.iOS.CustomRenderers
             {
                 nativeMap.TappedMarker = TappedMarker;
             }
+
+            if (e.NewElement is CustomMap myMap)
+            {
+                _customPins = myMap.CustomPins;
+            }
         }
 
         private bool TappedMarker(MapView mapView, Marker marker)
         {
             if (Element is CustomMap customMap)
             {
-                customMap.PinClickedCommand?.Execute(new Pin
+                customMap.InvokePinClickedEvent(new CustomPin
                 {
                     Position = new Position(marker.Position.Latitude, marker.Position.Longitude),
                     Label = marker.Title,

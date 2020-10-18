@@ -46,6 +46,7 @@
     <Folder Include="Definitions\VmLink\" />
     <Folder Include="Views\Onboarding\" />
     <Folder Include="ViewModels\Onboarding\" />
+    <Folder Include="Definitions\Enums\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\DataModels\DataModels.csproj" />
@@ -68,6 +69,20 @@
     <SharedImage Include="Resources\ic_star.svg" Resize="False" />
     <SharedImage Include="Resources\ic_user.svg" Resize="False" />
     <SharedImage Include="Resources\ic_chevron_left.svg" Resize="False" />
+    <SharedImage Include="Resources\ic_traffic_light.svg" Resize="False" />
+    <SharedImage Include="Resources\ic_wheelchair.svg" Resize="False" />
+    <SharedImage Include="Resources\ic_lift.svg" Resize="False" />
+    <SharedImage Include="Resources\ic_railway.svg" Resize="False" />
+    <SharedImage Include="Resources\ic_zebra_crossing.svg" Resize="False" />
+    <SharedImage Include="Resources\ic_brake_page.svg" Resize="False" />
+    <SharedImage Include="Resources\ic_road_block.svg" Resize="False" />
+    <SharedImage Include="Resources\ic_gun.svg" Resize="False" />
+    <SharedImage Include="Resources\ic_dog.svg" Resize="False" />
+    <SharedImage Include="Resources\ic_stairs.svg" Resize="False" />
+    <SharedImage Include="Resources\ic_escalator.svg" Resize="False" />
+    <SharedImage Include="Resources\ic_parking_barrier.svg" Resize="False" />
+    <SharedImage Include="Resources\ic_road_bicycle.svg" Resize="False" />
+    <SharedImage Include="Resources\ic_road.svg" Resize="False" />
 
     <SharedImage Include="Resources\image_volounteer.png" Resize="False" />
     <SharedImage Include="Resources\image_market_1.png" Resize="False" />
@@ -88,6 +103,7 @@
     <SharedImage Include="Resources\image_onboarding_2_3.png" Resize="False" />
     <SharedImage Include="Resources\image_onboarding_2_4.png" Resize="False" />
     <SharedImage Include="Resources\image_onboarding_2_5.png" Resize="False" />
+    <SharedImage Include="Resources\image_map_facility.png" Resize="False" />
   </ItemGroup>
 
   <ItemGroup>

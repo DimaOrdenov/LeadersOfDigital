@@ -122,7 +122,7 @@ namespace LeadersOfDigital.ViewModels
                     State = PageStateType.MinorLoading;
 
                     await NavigationService.NavigatePopupAsync<VolounteerRegistrationPage>();
-                   
+
                     State = PageStateType.Default;
                 },
                 () => true);
@@ -130,84 +130,102 @@ namespace LeadersOfDigital.ViewModels
             MainMap = new CustomMap
             {
                 IsIndoorEnabled = true,
-                PinClickedCommand = BuildPageVmCommand<Pin>(async pin =>
+            };
+
+            MainMap.PinClickedEvent += async (sender, e) =>
+            {
+                State = PageStateType.Loading;
+
+                const string GET_ROUTE = "Построить маршрут";
+                const string GET_INFO = "Получить информацию об объекте";
+
+                switch (await DialogService.DisplayActionSheet(null, "Отмена", null, new[] { GET_ROUTE, GET_INFO }))
                 {
-                    State = PageStateType.Loading;
+                    case GET_ROUTE:
+                        MainMap.Polylines.Clear();
 
-                    MainMap.Polylines.Clear();
-
-                    await ExceptionHandler.PerformCatchableTask(
-                        new ViewModelPerformableAction(async () =>
-                        {
-                            (bool result, Position myPosition) = await TryGetUserLocation();
-
-                            if (!result)
+                        await ExceptionHandler.PerformCatchableTask(
+                            new ViewModelPerformableAction(async () =>
                             {
-                                throw new BusinessLogicException(LogicExceptionType.BadRequest, "Не удалось определить ваше местоположение");
-                            }
+                                (bool result, Position myPosition) = await TryGetUserLocation();
 
-                            Position firstRoutePoint = new Position();
-                            Position lastRoutePoint = new Position();
-
-                            for (double i = 0; i < 3; i++)
-                            {
-                                Position waypoint = new Position(myPosition.Latitude + (i % 2 == 0 ? 0.005 : 0), myPosition.Longitude + (i > 0 ? 0.005 : 0));
-
-                                GoogleApi.GoogleDirection googleDirection = await _googleMapsApiLogicService.GetDirections(
-                                    new GoogleApiDirectionsRequest
-                                    {
-                                        Origin = myPosition,
-                                        Destination = pin.Position,
-                                        Waypoint = waypoint,
-                                    },
-                                    CancellationToken);
-
-                                IEnumerable<Position> positions = Decode(googleDirection.Routes.First().OverviewPolyline.Points);
-
-                                Polyline polyline = new Polyline
+                                if (!result)
                                 {
-                                    StrokeColor = i == 0 ? AppColors.Main : AppColors.LightMain,
-                                    StrokeWidth = 4,
-                                    IsClickable = true,
-                                    ZIndex = i == 0 ? 100 : 0,
-                                };
-
-                                polyline.Clicked += (sender, e) =>
-                                {
-                                    MainMap.Polylines.ForEach(x =>
-                                    {
-                                        x.StrokeColor = AppColors.LightMain;
-                                        x.ZIndex = 0;
-                                    });
-
-                                    polyline.StrokeColor = AppColors.Main;
-                                    polyline.ZIndex = 100;
-                                };
-
-                                foreach (Position position in positions)
-                                {
-                                    polyline.Positions.Add(position);
+                                    throw new BusinessLogicException(LogicExceptionType.BadRequest, "Не удалось определить ваше местоположение");
                                 }
 
-                                MainMap.Polylines.Add(polyline);
+                                Position firstRoutePoint = new Position();
+                                Position lastRoutePoint = new Position();
 
-                                if (i == 0)
+                                for (double i = 0; i < 3; i++)
                                 {
-                                    firstRoutePoint = positions.First();
-                                    lastRoutePoint = positions.Last();
+                                    Position waypoint = new Position(myPosition.Latitude + (i % 2 == 0 ? 0.005 : 0), myPosition.Longitude + (i > 0 ? 0.005 : 0));
+
+                                    GoogleApi.GoogleDirection googleDirection = await _googleMapsApiLogicService.GetDirections(
+                                        new GoogleApiDirectionsRequest
+                                        {
+                                            Origin = myPosition,
+                                            Destination = e.Pin.Position,
+                                            Waypoint = waypoint,
+                                        },
+                                        CancellationToken);
+
+                                    IEnumerable<Position> positions = Decode(googleDirection.Routes.First().OverviewPolyline.Points);
+
+                                    Polyline polyline = new Polyline
+                                    {
+                                        StrokeColor = i == 0 ? AppColors.Main : AppColors.LightMain,
+                                        StrokeWidth = 4,
+                                        IsClickable = true,
+                                        ZIndex = i == 0 ? 100 : 0,
+                                    };
+
+                                    polyline.Clicked += (sender, e) =>
+                                    {
+                                        MainMap.Polylines.ForEach(x =>
+                                        {
+                                            x.StrokeColor = AppColors.LightMain;
+                                            x.ZIndex = 0;
+                                        });
+
+                                        polyline.StrokeColor = AppColors.Main;
+                                        polyline.ZIndex = 100;
+                                    };
+
+                                    foreach (Position position in positions)
+                                    {
+                                        polyline.Positions.Add(position);
+                                    }
+
+                                    MainMap.Polylines.Add(polyline);
+
+                                    if (i == 0)
+                                    {
+                                        firstRoutePoint = positions.First();
+                                        lastRoutePoint = positions.Last();
+                                    }
                                 }
-                            }
 
-                            MainMap.MoveToRegion(MapSpan.FromBounds(Bounds.FromPositions(
-                                new List<Position> { firstRoutePoint, lastRoutePoint })).WithZoom(0.4));
+                                MainMap.MoveToRegion(MapSpan.FromBounds(Bounds.FromPositions(
+                                    new List<Position> { firstRoutePoint, lastRoutePoint })).WithZoom(0.4));
 
-                            Destination = pin.Address;
-                        }));
+                                Destination = e.Pin.Address;
+                            }));
 
-                    State = PageStateType.Default;
+                        State = PageStateType.Default;
 
-                    OnPropertyChanged(nameof(IsBuildingRouting));
-                }),
+                        OnPropertyChanged(nameof(IsBuildingRouting));
+                        break;
+                    case GET_INFO:
+                        State = PageStateType.MinorLoading;
+
+                        await NavigationService.NavigatePopupAsync<FacilityDetailsPage, int>(2);
+
+                        State = PageStateType.Default;
+                        break;
+                    default:
+                        return;
+                }
             };
 
             MainMap.MapLongClicked += async (sender, e) =>

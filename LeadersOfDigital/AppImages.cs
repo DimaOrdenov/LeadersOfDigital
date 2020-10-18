@@ -42,5 +42,7 @@ namespace LeadersOfDigital
         public static ImageSource ImageOnboarding24 => ImageSource.FromFile("image_onboarding_2_4.png");
 
         public static ImageSource ImageOnboarding25 => ImageSource.FromFile("image_onboarding_2_5.png");
+
+        public static ImageSource ImageMapFacility => ImageSource.FromFile("image_map_facility.png");
     }
 }
