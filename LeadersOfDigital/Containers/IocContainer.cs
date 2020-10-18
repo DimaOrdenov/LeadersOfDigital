@@ -11,6 +11,8 @@ using LeadersOfDigital.Views.VolunteerAccount;
 using LeadersOfDigital.ViewModels.VolunteerAccount;
 using LeadersOfDigital.BusinessLayer;
 using LeadersOfDigital.Helpers;
+using LeadersOfDigital.Views.Facility;
+using LeadersOfDigital.ViewModels.Facility;
 using LeadersOfDigital.ViewModels.Map;
 using LeadersOfDigital.Views.Map;
 using System.Reflection;
@@ -49,6 +51,10 @@ namespace LeadersOfDigital.Containers
             builder.RegisterType<FacilitiesLogic>().As<IFacilitiesLogic>().SingleInstance();
 
             // ViewModels
+            builder.RegisterType<MainPViewModel>().AsSelf();
+            builder.RegisterType<VolounteerRegistrationViewModel>().AsSelf();
+            builder.RegisterType<VolounteerAccountViewModel>().AsSelf();
+            builder.RegisterType<FacilityDetailsViewModel>().AsSelf();
             builder.RegisterAssemblyTypes(Assembly.GetExecutingAssembly())
                 .Where(t => t.FullName.Contains(nameof(ViewModels)))
                 .OnActivated(e =>
@@ -76,6 +82,7 @@ namespace LeadersOfDigital.Containers
             pageFactory.Configure<MainPage, MainPViewModel>(() => Container.Resolve<MainPViewModel>());
             pageFactory.Configure<VolounteerAccountPage, VolounteerAccountViewModel>(() => Container.Resolve<VolounteerAccountViewModel>());
             pageFactory.Configure<VolounteerRegistrationPage, VolounteerRegistrationViewModel>(() => Container.Resolve<VolounteerRegistrationViewModel>());
+            pageFactory.Configure<FacilityDetailsPage, FacilityDetailsViewModel>(() => Container.Resolve<FacilityDetailsViewModel>());
             pageFactory.Configure<AddMarkerPage, AddMarkerViewModel>(() => Container.Resolve<AddMarkerViewModel>());
             pageFactory.Configure<OnboardingOnePage, OnboardingOneViewModel>(() => Container.Resolve<OnboardingOneViewModel>());
             pageFactory.Configure<OnboardingTwoPage, OnboardingTwoViewModel>(() => Container.Resolve<OnboardingTwoViewModel>());

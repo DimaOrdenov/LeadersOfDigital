@@ -1,11 +1,41 @@
 ﻿using System;
-using System.Windows.Input;
+using System.Collections.Generic;
+using LeadersOfDigital.Definitions;
 using Xamarin.Forms.GoogleMaps;
 
 namespace LeadersOfDigital.ViewControls
 {
     public class CustomMap : Map
     {
-        public ICommand PinClickedCommand { get; set; }
+        public CustomMap()
+        {
+            CustomPins = new List<CustomPin>();
+        }
+
+        public event EventHandler<CustomPinClickedEventArgs> PinClickedEvent;
+
+        public IList<CustomPin> CustomPins { get; }
+
+        public void InvokePinClickedEvent(CustomPin pin) => PinClickedEvent?.Invoke(this, new CustomPinClickedEventArgs { Pin = pin });
+
+        public void AddPin(CustomPin pin)
+        {
+            Pins.Add(new Pin
+            {
+                Label = pin.Label,
+                Address = pin.Address,
+                Position = pin.Position,
+            });
+
+            CustomPins.Add(pin);
+        }
+
+        public void AddPins(IEnumerable<CustomPin> pins)
+        {
+            foreach (CustomPin pin in pins)
+            {
+                AddPin(pin);
+            }
+        }
     }
 }
