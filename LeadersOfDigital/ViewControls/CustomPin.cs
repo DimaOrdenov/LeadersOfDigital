@@ -10,6 +10,8 @@ namespace LeadersOfDigital.ViewControls
 
         public string Address { get; set; }
 
+        public BitmapDescriptor Icon { get; set; }
+
         public Definitions.Enums.PinType Type { get; set; }
     }
 }

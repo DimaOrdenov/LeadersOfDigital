@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Linq;
 using Google.Maps;
 using LeadersOfDigital.ViewControls;
 using MapKit;
@@ -36,6 +37,12 @@ namespace LeadersOfDigital.iOS.CustomRenderers
         {
             if (Element is CustomMap customMap)
             {
+                if (_customPins.FirstOrDefault(x => x.Position.Latitude == marker.Position.Latitude && x.Position.Longitude == marker.Position.Longitude) is CustomPin customPin &&
+                    customPin.Type == Definitions.Enums.PinType.Barrier)
+                {
+                    return false;
+                }
+
                 customMap.InvokePinClickedEvent(new CustomPin
                 {
                     Position = new Position(marker.Position.Latitude, marker.Position.Longitude),

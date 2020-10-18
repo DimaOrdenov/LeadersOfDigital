@@ -24,6 +24,7 @@ using LeadersOfDigital.Views.Map;
 using LeadersOfDigital.Definitions.VmLink;
 using Xamarin.Forms;
 using Xamarin.Forms.Internals;
+using FFImageLoading.Svg.Forms;
 
 namespace LeadersOfDigital.ViewModels
 {
@@ -111,6 +112,8 @@ namespace LeadersOfDigital.ViewModels
 
                 MainMap.Polylines.Clear();
 
+                MainMap.RemovePins(MainMap.CustomPins.Where(x => x.Type == Definitions.Enums.PinType.Barrier).ToList());
+
                 OnPropertyChanged(nameof(IsBuildingRouting));
 
                 State = PageStateType.Default;
@@ -134,14 +137,14 @@ namespace LeadersOfDigital.ViewModels
 
             MainMap.PinClickedEvent += async (sender, e) =>
             {
-                State = PageStateType.Loading;
-
                 const string GET_ROUTE = "Построить маршрут";
                 const string GET_INFO = "Получить информацию об объекте";
 
                 switch (await DialogService.DisplayActionSheet(null, "Отмена", null, new[] { GET_ROUTE, GET_INFO }))
                 {
                     case GET_ROUTE:
+                        State = PageStateType.MinorLoading;
+
                         MainMap.Polylines.Clear();
 
                         await ExceptionHandler.PerformCatchableTask(
@@ -199,6 +202,34 @@ namespace LeadersOfDigital.ViewModels
 
                                     MainMap.Polylines.Add(polyline);
 
+                                    Position barrierPosition1 = positions.ElementAt(positions.Count() / 3);
+                                    Position barrierPosition2 = positions.ElementAt(positions.Count() / 4);
+                                    Position barrierPosition3 = positions.ElementAt(positions.Count() * 2 / 4);
+
+                                    MainMap.AddPin(new CustomPin
+                                    {
+                                        Label = "Бордюр",
+                                        Address = "address",
+                                        Position = barrierPosition1,
+                                        Type = Definitions.Enums.PinType.Barrier,
+                                    });
+
+                                    MainMap.AddPin(new CustomPin
+                                    {
+                                        Label = "Ступеньки",
+                                        Address = "address",
+                                        Position = barrierPosition2,
+                                        Type = Definitions.Enums.PinType.Barrier,
+                                    });
+
+                                    MainMap.AddPin(new CustomPin
+                                    {
+                                        Label = "Яма",
+                                        Address = "address",
+                                        Position = barrierPosition3,
+                                        Type = Definitions.Enums.PinType.Barrier,
+                                    });
+
                                     if (i == 0)
                                     {
                                         firstRoutePoint = positions.First();
@@ -229,36 +260,36 @@ namespace LeadersOfDigital.ViewModels
             };
 
             MainMap.MapLongClicked += async (sender, e) =>
+                {
+                    MainMap.MoveToRegion(MapSpan.FromCenterAndRadius(new Position(e.Point.Latitude, e.Point.Longitude), MainMap.VisibleRegion.Radius));
+
+                    if (await DialogService.DisplayAlert(
+                        "Дорожное событие",
+                        "Вы можете создать дорожное событие, указав общую проблематику, описать пробему и приложить фотографии",
+                        "Добавить",
+                        "Отмена"))
                     {
-                        MainMap.MoveToRegion(MapSpan.FromCenterAndRadius(new Position(e.Point.Latitude, e.Point.Longitude), MainMap.VisibleRegion.Radius));
+                        State = PageStateType.MinorLoading;
 
-                        if (await DialogService.DisplayAlert(
-                            "Дорожное событие",
-                            "Вы можете создать дорожное событие, указав общую проблематику, описать пробему и приложить фотографии",
-                            "Добавить",
-                            "Отмена"))
+                        string address = string.Empty;
+
+                        try
                         {
-                            State = PageStateType.MinorLoading;
+                            Geocoder geocoder = new Geocoder();
+                            IEnumerable<string> addresses = await geocoder.GetAddressesForPositionAsync(e.Point);
 
-                            string address = string.Empty;
-
-                            try
-                            {
-                                Geocoder geocoder = new Geocoder();
-                                IEnumerable<string> addresses = await geocoder.GetAddressesForPositionAsync(e.Point);
-
-                                address = addresses.FirstOrDefault()?.Split("\n")?.FirstOrDefault() ?? "ул.Пушкина, д.1";
-                            }
-                            catch (Exception ex)
-                            {
-                                DebuggerService.Log(ex);
-                            }
-
-                            await NavigationService.NavigatePopupAsync<AddMarkerPage, AddMarkerVmLink>(new AddMarkerVmLink(e.Point.Latitude, e.Point.Longitude, address));
-
-                            State = PageStateType.Default;
+                            address = addresses.FirstOrDefault()?.Split("\n")?.FirstOrDefault() ?? "ул.Пушкина, д.1";
                         }
-                    };
+                        catch (Exception ex)
+                        {
+                            DebuggerService.Log(ex);
+                        }
+
+                        await NavigationService.NavigatePopupAsync<AddMarkerPage, AddMarkerVmLink>(new AddMarkerVmLink(e.Point.Latitude, e.Point.Longitude, address));
+
+                        State = PageStateType.Default;
+                    }
+                };
 
             extendedUserContext.UserContextChanged += (sender, e) => OnPropertyChanged(nameof(CanBecomeVolunteer));
         }
@@ -293,7 +324,7 @@ namespace LeadersOfDigital.ViewModels
                 MoveToPosition(myPosition, Distance.FromKilometers(6));
             }
 
-            MainMap.Pins.Add(await GetNearPin(myPosition));
+            MainMap.AddPin(await GetNearPin(myPosition));
 
             State = PageStateType.Default;
 
@@ -343,7 +374,7 @@ namespace LeadersOfDigital.ViewModels
             MainMap.MoveToRegion(
                 MapSpan.FromCenterAndRadius(position, distance));
 
-        private async Task<Pin> GetNearPin(Position myPosition)
+        private async Task<CustomPin> GetNearPin(Position myPosition)
         {
             Position pinPosition = new Position(myPosition.Latitude + 0.01, myPosition.Longitude + 0.01);
             string address = string.Empty;
@@ -360,11 +391,12 @@ namespace LeadersOfDigital.ViewModels
                 DebuggerService.Log(ex);
             }
 
-            return new Pin
+            return new CustomPin
             {
                 Label = "Магазин",
                 Address = address,
                 Position = pinPosition,
+                Type = Definitions.Enums.PinType.Facility,
             };
         }
 
