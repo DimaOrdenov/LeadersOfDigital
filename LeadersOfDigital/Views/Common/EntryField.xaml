@@ -6,7 +6,7 @@
              x:Name="this">
 
     <Frame CornerRadius="8"
-           BackgroundColor="{x:Static local:AppColors.BgMain}"
+           BackgroundColor="{x:Static local:AppColors.PaleGray}"
            Padding="16,8">
 
         <Entry Text="{Binding Text, Source={x:Reference this}}"

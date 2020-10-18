@@ -36,6 +36,8 @@ namespace LeadersOfDigital.iOS
 
             Xamarin.FormsGoogleMaps.Init(Secrets.GoogleApiKey);
 
+            PanCardView.iOS.CardsViewRenderer.Preserve();
+
             LoadApplication(new App());
 
             return base.FinishedLaunching(app, options);

@@ -11,8 +11,264 @@
                           xmlns:commonViews="clr-namespace:LeadersOfDigital.Views.Common"
                           xmlns:behaviors="clr-namespace:LeadersOfDigital.Behaviors"
                           xmlns:converters="clr-namespace:NoTryCatch.Xamarin.Portable.Converters;assembly=NoTryCatch.Xamarin.Portable"
-                          xmlns:pancake="clr-namespace:Xamarin.Forms.PancakeView;assembly=Xamarin.Forms.PancakeView">
+                          xmlns:pancake="clr-namespace:Xamarin.Forms.PancakeView;assembly=Xamarin.Forms.PancakeView"
+                          xmlns:pancard="clr-namespace:PanCardView;assembly=PanCardView"
+                          xmlns:pancardControls="clr-namespace:PanCardView.Controls;assembly=PanCardView"
+                          NavigationPage.HasNavigationBar="False"
+                          Padding="0,44,0,0">
 
-    <StackLayout />
+    <ntcViewcontrols:BasePage.Resources>
+        <ResourceDictionary>
+            <Style x:Key="ActiveIndicator"
+                   TargetType="Frame">
+                <Setter Property="BackgroundColor"
+                        Value="{x:Static local:AppColors.Main}" />
+            </Style>
+            <Style x:Key="InactiveIndicator"
+                   TargetType="Frame">
+                <Setter Property="BackgroundColor"
+                        Value="{x:Static local:AppColors.PaleGray}" />
+            </Style>
+        </ResourceDictionary>
+    </ntcViewcontrols:BasePage.Resources>
+
+    <ScrollView>
+        <StackLayout Padding="12,0,12,40">
+
+            <Grid ColumnSpacing="16">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="6" />
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+
+                <BoxView CornerRadius="3"
+                         Color="{x:Static local:AppColors.Main}" />
+
+                <BoxView Grid.Column="1"
+                         CornerRadius="3"
+                         Color="{x:Static local:AppColors.PaleGray}">
+                    <BoxView.Triggers>
+                        <DataTrigger TargetType="BoxView"
+                                     Binding="{Binding Step}"
+                                     Value="2">
+                            <Setter Property="Color"
+                                    Value="{x:Static local:AppColors.Main}" />
+                        </DataTrigger>
+                        <DataTrigger TargetType="BoxView"
+                                     Binding="{Binding Step}"
+                                     Value="3">
+                            <Setter Property="Color"
+                                    Value="{x:Static local:AppColors.Main}" />
+                        </DataTrigger>
+                    </BoxView.Triggers>
+                </BoxView>
+
+                <BoxView Grid.Column="2"
+                         CornerRadius="3"
+                         Color="{x:Static local:AppColors.PaleGray}">
+                    <BoxView.Triggers>
+                        <DataTrigger TargetType="BoxView"
+                                     Binding="{Binding Step}"
+                                     Value="3">
+                            <Setter Property="Color"
+                                    Value="{x:Static local:AppColors.Main}" />
+                        </DataTrigger>
+                    </BoxView.Triggers>
+                </BoxView>
+
+            </Grid>
+
+            <StackLayout Orientation="Horizontal"
+                         Margin="0,28,0,0">
+
+                <Frame CornerRadius="8"
+                       BackgroundColor="{x:Static local:AppColors.PaleGray}"
+                       VerticalOptions="Center"
+                       IsVisible="{Binding CanReturn}">
+                    <ContentView xameff:Commands.Tap="{Binding PreviousStepCommand}"
+                                 xameff:TouchEffect.Color="{x:Static local:AppColors.RippleEffectBlack}"
+                                 Padding="16,8">
+                        <Label Text="Шаг назад" />
+                    </ContentView>
+                </Frame>
+
+                <Label Text="{Binding Step, StringFormat='Шаг {0} из 3'}"
+                       VerticalOptions="Center"
+                       HorizontalOptions="EndAndExpand" />
+
+            </StackLayout>
+
+            <StackLayout VerticalOptions="FillAndExpand"
+                         IsVisible="False">
+                <StackLayout.Triggers>
+                    <DataTrigger TargetType="StackLayout"
+                                 Binding="{Binding Step}"
+                                 Value="1">
+                        <Setter Property="IsVisible"
+                                Value="True" />
+                    </DataTrigger>
+                </StackLayout.Triggers>
+
+                <Label Text="Привет!"
+                       FontSize="36"
+                       Margin="0,36,0,0"
+                       HorizontalOptions="CenterAndExpand"
+                       HorizontalTextAlignment="Center" />
+
+                <Label Text="Это приложение &quot;Saferoute&quot;."
+                       FontSize="18"
+                       Margin="0,32,0,0"
+                       HorizontalOptions="CenterAndExpand"
+                       HorizontalTextAlignment="Center" />
+
+                <Label Text="Оно поможет добраться тебе до нужной цели самостоятельно или при помощи добрых людей"
+                       FontSize="18"
+                       HorizontalOptions="CenterAndExpand"
+                       HorizontalTextAlignment="Center" />
+
+                <Image Source="{x:Static local:AppImages.ImageSafeRouteLogo}"
+                       Margin="0,96,0,0" />
+
+                <Button Text="Продолжить"
+                        VerticalOptions="EndAndExpand"
+                        Command="{Binding NextStepCommand}" />
+            </StackLayout>
+
+            <StackLayout VerticalOptions="FillAndExpand"
+                         IsVisible="False">
+                <StackLayout.Triggers>
+                    <DataTrigger TargetType="StackLayout"
+                                 Binding="{Binding Step}"
+                                 Value="2">
+                        <Setter Property="IsVisible"
+                                Value="True" />
+                    </DataTrigger>
+                </StackLayout.Triggers>
+
+                <Label Text="Особые потребности"
+                       FontSize="36"
+                       Margin="0,36,0,0"
+                       HorizontalOptions="CenterAndExpand"
+                       HorizontalTextAlignment="Center" />
+
+                <Label Text="Помогите нам узнать о вас и тогда мы сможем создать для вас лучший маршрут!"
+                       FontSize="18"
+                       Margin="0,32,0,0"
+                       HorizontalOptions="CenterAndExpand"
+                       HorizontalTextAlignment="Center" />
+
+                <pancard:CarouselView x:Name="carousel"
+                                      IsCyclical="False"
+                                      ItemsSource="{Binding CarouselItems}"
+                                      Margin="0,44,0,0"
+                                      VerticalOptions="FillAndExpand">
+
+                    <pancard:CarouselView.ItemTemplate>
+                        <DataTemplate>
+                            <StackLayout Spacing="24"
+                                         Padding="0,0,0,60">
+
+                                <Label Text="{Binding Item1}"
+                                       FontSize="18"
+                                       FontAttributes="Bold"
+                                       HorizontalTextAlignment="Center" />
+
+                                <Image Source="{Binding Item2}"
+                                       WidthRequest="160"
+                                       HorizontalOptions="Center" />
+
+                            </StackLayout>
+                        </DataTemplate>
+                    </pancard:CarouselView.ItemTemplate>
+
+                    <pancardControls:IndicatorsControl Scale="1.4"
+                                                       SelectedIndicatorStyle="{StaticResource ActiveIndicator}"
+                                                       UnselectedIndicatorStyle="{StaticResource InactiveIndicator}" />
+
+                </pancard:CarouselView>
+
+                <Button Text="Продолжить"
+                        VerticalOptions="EndAndExpand"
+                        Command="{Binding NextStepCommand}"
+                        Margin="0,20,0,0" />
+
+                <Button Text="Я волонтер"
+                        VerticalOptions="EndAndExpand"
+                        BackgroundColor="{x:Static local:AppColors.PaleGray}"
+                        TextColor="{x:Static local:AppColors.Secondary}"
+                        Command="{Binding VolounteerCommand}"
+                        Margin="0,16,0,0" />
+
+            </StackLayout>
+
+            <StackLayout VerticalOptions="FillAndExpand"
+                         IsVisible="False">
+                <StackLayout.Triggers>
+                    <DataTrigger TargetType="StackLayout"
+                                 Binding="{Binding Step}"
+                                 Value="3">
+                        <Setter Property="IsVisible"
+                                Value="True" />
+                    </DataTrigger>
+                </StackLayout.Triggers>
+
+                <Label Text="Регистрация"
+                       FontSize="36"
+                       Margin="0,36,0,0"
+                       HorizontalOptions="CenterAndExpand"
+                       HorizontalTextAlignment="Center" />
+
+                <Label Text="Регистрация позволит вам нанимать волонтеров, ставить оценки объектам и писать о проблемах с передвижением."
+                       FontSize="18"
+                       Margin="0,32,0,0"
+                       HorizontalOptions="CenterAndExpand"
+                       HorizontalTextAlignment="Center" />
+
+                <Label Text="Этот шаг не обязателен и вы можете его пропустить."
+                       FontSize="18"
+                       HorizontalOptions="CenterAndExpand"
+                       HorizontalTextAlignment="Center" />
+
+                <commonViews:EntryField Placeholder="Фамилия Имя"
+                                        Margin="0,48,0,0" />
+
+                <StackLayout Orientation="Horizontal"
+                             Spacing="16"
+                             Margin="0,16,0,0"
+                             BindableLayout.ItemsSource="{Binding SexMenuItemsCollection}">
+
+                    <BindableLayout.ItemTemplate>
+                        <DataTemplate>
+                            <commonViews:FloatingMenuItemView />
+                        </DataTemplate>
+                    </BindableLayout.ItemTemplate>
+
+                </StackLayout>
+
+                <commonViews:EntryField Placeholder="Email"
+                                        Margin="0,16,0,0" />
+
+                <commonViews:EntryField Placeholder="Номер телефона"
+                                        Margin="0,16,0,0" />
+
+                <Button Text="Зарегистрироваться"
+                        VerticalOptions="EndAndExpand"
+                        Command="{Binding RegisterCommand}"
+                        Margin="0,40,0,0" />
+
+                <Button Text="Пропустить регистрацию и начать работу"
+                        BackgroundColor="{x:Static local:AppColors.PaleGray}"
+                        TextColor="{x:Static local:AppColors.Secondary}"
+                        Command="{Binding PassRegistrationCommand}"
+                        Margin="0,16,0,0" />
+
+            </StackLayout>
+
+        </StackLayout>
+    </ScrollView>
 
 </ntcViewcontrols:BasePage>
