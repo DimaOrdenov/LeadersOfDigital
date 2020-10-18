@@ -19,6 +19,7 @@ using System.Collections.Generic;
 using LeadersOfDigital.Definitions.Requests;
 using LeadersOfDigital.ViewModels.VolunteerAccount;
 using LeadersOfDigital.Views.VolunteerAccount;
+using LeadersOfDigital.Views.Facility;
 
 namespace LeadersOfDigital.ViewModels
 {
@@ -117,7 +118,7 @@ namespace LeadersOfDigital.ViewModels
                     State = PageStateType.MinorLoading;
 
                     await NavigationService.NavigatePopupAsync<VolounteerRegistrationPage>();
-
+                   
                     State = PageStateType.Default;
                 },
                 () => true);
