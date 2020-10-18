@@ -9,5 +9,8 @@ namespace DataModels.Responses.Enums
 
         [Description("Продуктовый магазин")]
         GroceryStore,
+
+        [Description("Дорога")]
+        Road,
     }
 }

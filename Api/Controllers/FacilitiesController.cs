@@ -27,7 +27,7 @@ namespace Api.Controllers
 
         // GET: api/Facilities
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<FacilityResponse>>> GetFacilities() => 
+        public async Task<ActionResult<IEnumerable<FacilityResponse>>> GetFacilities() =>
             _mapper.Map<IEnumerable<FacilityResponse>>(await _context.Facilities.ToListAsync()).ToList();
 
         // GET: api/Facilities/5

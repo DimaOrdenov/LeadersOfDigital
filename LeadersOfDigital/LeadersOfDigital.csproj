@@ -40,6 +40,11 @@
     <Folder Include="Views\Common\" />
     <Folder Include="Behaviors\" />
     <Folder Include="ViewModels\Common\" />
+    <Folder Include="Views\Map\" />
+    <Folder Include="ViewModels\Map\" />
+    <Folder Include="Definitions\VmLink\" />
+    <Folder Include="Views\Onboarding\" />
+    <Folder Include="ViewModels\Onboarding\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\DataModels\DataModels.csproj" />
@@ -61,6 +66,7 @@
     <SharedImage Include="Resources\ic_achievement_2.svg" Resize="False" />
     <SharedImage Include="Resources\ic_star.svg" Resize="False" />
     <SharedImage Include="Resources\ic_user.svg" Resize="False" />
+    <SharedImage Include="Resources\ic_chevron_left.svg" Resize="False" />
 
     <SharedImage Include="Resources\image_volounteer.png" Resize="False" />
     <SharedImage Include="Resources\image_market_1.png" Resize="False" />
@@ -69,6 +75,8 @@
     <SharedImage Include="Resources\image_market_4.png" Resize="False" />
     <SharedImage Include="Resources\image_market_5.png" Resize="False" />
     <SharedImage Include="Resources\image_market_6.png" Resize="False" />
+    <SharedImage Include="Resources\image_barrier_1.png" Resize="False" />
+    <SharedImage Include="Resources\image_barrier_2.png" Resize="False" />
   </ItemGroup>
 
   <ItemGroup>

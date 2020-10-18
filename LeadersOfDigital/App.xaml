@@ -2,6 +2,7 @@
 <Application xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:local="clr-namespace:LeadersOfDigital"
+             xmlns:ffimageSvg="clr-namespace:FFImageLoading.Svg.Forms;assembly=FFImageLoading.Svg.Forms"
              x:Class="LeadersOfDigital.App">
 
     <Application.Resources>
@@ -48,6 +49,11 @@
                         Value="White" />
                 <Setter Property="BackgroundColor"
                         Value="{x:Static local:AppColors.Main}" />
+            </Style>
+            <Style TargetType="ffimageSvg:SvgCachedImage"
+                   ApplyToDerivedTypes="True">
+                <Setter Property="FadeAnimationEnabled"
+                        Value="False" />
             </Style>
         </ResourceDictionary>
     </Application.Resources>

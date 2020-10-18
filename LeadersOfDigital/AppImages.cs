@@ -18,5 +18,9 @@ namespace LeadersOfDigital
         public static ImageSource ImageMarket5 => ImageSource.FromFile("image_market_5.png");
 
         public static ImageSource ImageMarket6 => ImageSource.FromFile("image_market_6.png");
+
+        public static ImageSource ImageBarrier1 => ImageSource.FromFile("image_barrier_1.png");
+
+        public static ImageSource ImageBarrier2 => ImageSource.FromFile("image_barrier_2.png");
     }
 }

@@ -20,6 +20,10 @@ using LeadersOfDigital.Definitions.Requests;
 using LeadersOfDigital.ViewModels.VolunteerAccount;
 using LeadersOfDigital.Views.VolunteerAccount;
 using LeadersOfDigital.Views.Facility;
+using LeadersOfDigital.Views.Map;
+using LeadersOfDigital.Definitions.VmLink;
+using Xamarin.Forms;
+using Xamarin.Forms.Internals;
 
 namespace LeadersOfDigital.ViewModels
 {
@@ -55,7 +59,7 @@ namespace LeadersOfDigital.ViewModels
             ExtendedUserContext extendedUserContext)
             : base(navigationService, dialogService, debuggerService, exceptionHandler)
         {
-             _facilitiesLogic = facilitiesLogic;
+            _facilitiesLogic = facilitiesLogic;
             _googleMapsApiLogicService = googleMapsApiLogicService;
             _extendedUserContext = extendedUserContext;
 
@@ -81,7 +85,7 @@ namespace LeadersOfDigital.ViewModels
 
                 if (result)
                 {
-                    MoveToPosition(myPosition);
+                    MoveToPosition(myPosition, Distance.FromKilometers(1));
                 }
 
                 State = PageStateType.Default;
@@ -142,30 +146,60 @@ namespace LeadersOfDigital.ViewModels
                                 throw new BusinessLogicException(LogicExceptionType.BadRequest, "Не удалось определить ваше местоположение");
                             }
 
-                            GoogleApi.GoogleDirection googleDirection =
-                                await _googleMapsApiLogicService.GetDirections(
+                            Position firstRoutePoint = new Position();
+                            Position lastRoutePoint = new Position();
+
+                            for (double i = 0; i < 3; i++)
+                            {
+                                Position waypoint = new Position(myPosition.Latitude + (i % 2 == 0 ? 0.005 : 0), myPosition.Longitude + (i > 0 ? 0.005 : 0));
+
+                                GoogleApi.GoogleDirection googleDirection = await _googleMapsApiLogicService.GetDirections(
                                     new GoogleApiDirectionsRequest
                                     {
-                                        TravelMode = "walking",
                                         Origin = myPosition,
                                         Destination = pin.Position,
+                                        Waypoint = waypoint,
                                     },
                                     CancellationToken);
 
-                            IEnumerable<Position> positions = Decode(googleDirection.Routes.First().OverviewPolyline.Points);
+                                IEnumerable<Position> positions = Decode(googleDirection.Routes.First().OverviewPolyline.Points);
 
-                            Polyline polyline = new Polyline
-                            {
-                                StrokeColor = AppColors.Main,
-                                StrokeWidth = 4,
-                            };
+                                Polyline polyline = new Polyline
+                                {
+                                    StrokeColor = i == 0 ? AppColors.Main : AppColors.LightMain,
+                                    StrokeWidth = 4,
+                                    IsClickable = true,
+                                    ZIndex = i == 0 ? 100 : 0,
+                                };
 
-                            foreach (Position position in positions)
-                            {
-                                polyline.Positions.Add(position);
+                                polyline.Clicked += (sender, e) =>
+                                {
+                                    MainMap.Polylines.ForEach(x =>
+                                    {
+                                        x.StrokeColor = AppColors.LightMain;
+                                        x.ZIndex = 0;
+                                    });
+
+                                    polyline.StrokeColor = AppColors.Main;
+                                    polyline.ZIndex = 100;
+                                };
+
+                                foreach (Position position in positions)
+                                {
+                                    polyline.Positions.Add(position);
+                                }
+
+                                MainMap.Polylines.Add(polyline);
+
+                                if (i == 0)
+                                {
+                                    firstRoutePoint = positions.First();
+                                    lastRoutePoint = positions.Last();
+                                }
                             }
 
-                            MainMap.Polylines.Add(polyline);
+                            MainMap.MoveToRegion(MapSpan.FromBounds(Bounds.FromPositions(
+                                new List<Position> { firstRoutePoint, lastRoutePoint })).WithZoom(0.4));
 
                             Destination = pin.Address;
                         }));
@@ -177,9 +211,36 @@ namespace LeadersOfDigital.ViewModels
             };
 
             MainMap.MapLongClicked += async (sender, e) =>
-            {
-                await DialogService.DisplayAlert(string.Empty, $"Добавить маркер в {e.Point.Latitude};{e.Point.Longitude}", "Да", "Нет");
-            };
+                    {
+                        MainMap.MoveToRegion(MapSpan.FromCenterAndRadius(new Position(e.Point.Latitude, e.Point.Longitude), MainMap.VisibleRegion.Radius));
+
+                        if (await DialogService.DisplayAlert(
+                            "Дорожное событие",
+                            "Вы можете создать дорожное событие, указав общую проблематику, описать пробему и приложить фотографии",
+                            "Добавить",
+                            "Отмена"))
+                        {
+                            State = PageStateType.MinorLoading;
+
+                            string address = string.Empty;
+
+                            try
+                            {
+                                Geocoder geocoder = new Geocoder();
+                                IEnumerable<string> addresses = await geocoder.GetAddressesForPositionAsync(e.Point);
+
+                                address = addresses.FirstOrDefault()?.Split("\n")?.FirstOrDefault() ?? "ул.Пушкина, д.1";
+                            }
+                            catch (Exception ex)
+                            {
+                                DebuggerService.Log(ex);
+                            }
+
+                            await NavigationService.NavigatePopupAsync<AddMarkerPage, AddMarkerVmLink>(new AddMarkerVmLink(e.Point.Latitude, e.Point.Longitude, address));
+
+                            State = PageStateType.Default;
+                        }
+                    };
 
             extendedUserContext.UserContextChanged += (sender, e) => OnPropertyChanged(nameof(CanBecomeVolunteer));
         }
@@ -202,25 +263,19 @@ namespace LeadersOfDigital.ViewModels
             {
                 return;
             }
-            var p = await  _facilitiesLogic.Get(CancellationToken);
+
             State = PageStateType.MinorLoading;
 
-            MainMap.MoveCamera(CameraUpdateFactory.NewPosition(new Position(55.751314, 37.627335)));
+            await MainMap.MoveCamera(CameraUpdateFactory.NewPositionZoom(new Position(55.751314, 37.627335), 0.5));
 
             (bool result, Position myPosition) = await TryGetUserLocation();
 
             if (result)
             {
-                MoveToPosition(myPosition);
+                MoveToPosition(myPosition, Distance.FromKilometers(6));
             }
 
-            MainMap.Pins.Add(new Pin
-            {
-                Position = new Position(55.751314, 37.627335),
-                Label = "test",
-                Address = "address",
-                //Icon = BitmapDescriptorFactory.FromBundle("ic_pin.png"),
-            });
+            MainMap.Pins.Add(await GetNearPin(myPosition));
 
             State = PageStateType.Default;
 
@@ -266,9 +321,34 @@ namespace LeadersOfDigital.ViewModels
             return (position != null, position);
         }
 
-        private void MoveToPosition(Position position) =>
+        private void MoveToPosition(Position position, Distance distance) =>
             MainMap.MoveToRegion(
-                MapSpan.FromCenterAndRadius(position, Distance.FromKilometers(6)));
+                MapSpan.FromCenterAndRadius(position, distance));
+
+        private async Task<Pin> GetNearPin(Position myPosition)
+        {
+            Position pinPosition = new Position(myPosition.Latitude + 0.01, myPosition.Longitude + 0.01);
+            string address = string.Empty;
+
+            try
+            {
+                Geocoder geocoder = new Geocoder();
+                IEnumerable<string> addresses = await geocoder.GetAddressesForPositionAsync(pinPosition);
+
+                address = addresses.FirstOrDefault()?.Split("\n")?.FirstOrDefault() ?? "ул.Пушкина, д.1";
+            }
+            catch (Exception ex)
+            {
+                DebuggerService.Log(ex);
+            }
+
+            return new Pin
+            {
+                Label = "Магазин",
+                Address = address,
+                Position = pinPosition,
+            };
+        }
 
         public IEnumerable<Position> Decode(string encodedPoints)
         {
