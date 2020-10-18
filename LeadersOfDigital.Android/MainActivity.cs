@@ -65,6 +65,8 @@ namespace LeadersOfDigital.Droid
 
             Xamarin.FormsGoogleMaps.Init(this, savedInstanceState);
 
+            PanCardView.Droid.CardsViewRenderer.Preserve();
+
             LoadApplication(new App());
         }
     }

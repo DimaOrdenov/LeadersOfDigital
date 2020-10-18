@@ -21,6 +21,8 @@ using NoTryCatch.Xamarin.Definitions;
 using NoTryCatch.BL.Core.Exceptions;
 using System.Threading.Tasks;
 using System;
+using LeadersOfDigital.Views.Onboarding;
+using LeadersOfDigital.ViewModels.Onboarding;
 
 namespace LeadersOfDigital.Containers
 {
@@ -82,6 +84,8 @@ namespace LeadersOfDigital.Containers
             pageFactory.Configure<VolounteerRegistrationPage, VolounteerRegistrationViewModel>(() => Container.Resolve<VolounteerRegistrationViewModel>());
             pageFactory.Configure<FacilityDetailsPage, FacilityDetailsViewModel>(() => Container.Resolve<FacilityDetailsViewModel>());
             pageFactory.Configure<AddMarkerPage, AddMarkerViewModel>(() => Container.Resolve<AddMarkerViewModel>());
+            pageFactory.Configure<OnboardingOnePage, OnboardingOneViewModel>(() => Container.Resolve<OnboardingOneViewModel>());
+            pageFactory.Configure<OnboardingTwoPage, OnboardingTwoViewModel>(() => Container.Resolve<OnboardingTwoViewModel>());
         }
     }
 }

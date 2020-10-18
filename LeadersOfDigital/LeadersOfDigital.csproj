@@ -24,6 +24,7 @@
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
     <PackageReference Include="Xamarin.Forms.PancakeView" Version="2.1.0.714" />
+    <PackageReference Include="CardsView" Version="2.6.4" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Views\" />
@@ -77,6 +78,16 @@
     <SharedImage Include="Resources\image_market_6.png" Resize="False" />
     <SharedImage Include="Resources\image_barrier_1.png" Resize="False" />
     <SharedImage Include="Resources\image_barrier_2.png" Resize="False" />
+    <SharedImage Include="Resources\image_saferoute_logo.png" Resize="False" />
+    <SharedImage Include="Resources\image_disabled_people.png" Resize="False" />
+    <SharedImage Include="Resources\image_deaf_people.png" Resize="False" />
+    <SharedImage Include="Resources\image_blind_people.png" Resize="False" />
+    <SharedImage Include="Resources\image_wheelchair_people.png" Resize="False" />
+    <SharedImage Include="Resources\image_onboarding_2_1.png" Resize="False" />
+    <SharedImage Include="Resources\image_onboarding_2_2.png" Resize="False" />
+    <SharedImage Include="Resources\image_onboarding_2_3.png" Resize="False" />
+    <SharedImage Include="Resources\image_onboarding_2_4.png" Resize="False" />
+    <SharedImage Include="Resources\image_onboarding_2_5.png" Resize="False" />
   </ItemGroup>
 
   <ItemGroup>
