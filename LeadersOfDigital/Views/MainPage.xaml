@@ -40,7 +40,8 @@
                        BackgroundColor="{x:Static local:AppColors.BgWhite}"
                        HorizontalOptions="FillAndExpand"
                        Padding="16,0">
-                    <Entry Placeholder="Поиск адреса" />
+                    <Entry Placeholder="Поиск адреса"
+                           Text="{Binding SearchText}" />
                 </Frame>
 
             </StackLayout>

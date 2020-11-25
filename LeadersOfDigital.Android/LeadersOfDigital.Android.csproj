@@ -76,6 +76,8 @@
     <Compile Include="CustomRenderers\ShadowFrameRenderer.cs" />
     <Compile Include="CustomRenderers\CustomMapRenderer.cs" />
     <Compile Include="SplashActivity.cs" />
+    <Compile Include="DependencyServices\PlatformSpeechToTextService.cs" />
+    <Compile Include="DependencyServices\IAndroidSpeechToTextService.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\AboutResources.txt" />

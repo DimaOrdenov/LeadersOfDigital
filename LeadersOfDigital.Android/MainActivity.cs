@@ -5,6 +5,9 @@ using Android.OS;
 using LeadersOfDigital.Containers;
 using LeadersOfDigital.Droid.DependencyServices;
 using Plugin.CurrentActivity;
+using Android.Content;
+using Android.Speech;
+using System;
 
 namespace LeadersOfDigital.Droid
 {
@@ -18,6 +21,8 @@ namespace LeadersOfDigital.Droid
         ScreenOrientation = ScreenOrientation.Portrait)]
     public class MainActivity : global::Xamarin.Forms.Platform.Android.FormsAppCompatActivity
     {
+        private IAndroidSpeechToTextService _speechToTextService;
+
         public static readonly string NotificationChannelId = CrossCurrentActivity.Current.AppContext.PackageName;
 
         public override void OnRequestPermissionsResult(int requestCode, string[] permissions, [GeneratedEnum] Permission[] grantResults)
@@ -54,7 +59,11 @@ namespace LeadersOfDigital.Droid
 
             global::Xamarin.Forms.Forms.Init(this, savedInstanceState);
 
-            IocContainer.Init(new PlatformAlertMessageService());
+            _speechToTextService = new PlatformSpeechToTextService();
+
+            IocContainer.Init(
+                new PlatformAlertMessageService(),
+                _speechToTextService);
 
             // Init nugets
             XamEffects.Droid.Effects.Init();
@@ -68,6 +77,30 @@ namespace LeadersOfDigital.Droid
             PanCardView.Droid.CardsViewRenderer.Preserve();
 
             LoadApplication(new App());
+        }
+
+        protected override void OnActivityResult(int requestCode, Result resultCode, Intent data)
+        {
+            if (requestCode == 10 &&
+                resultCode == Result.Ok)
+            {
+                var matches = data.GetStringArrayListExtra(RecognizerIntent.ExtraResults);
+
+                if (matches.Count != 0)
+                {
+                    string textInput = matches[0];
+
+                    _speechToTextService.InvokeSpeechRecognitionEvent(textInput);
+
+                    Console.WriteLine(textInput);
+                }
+                else
+                {
+                    Console.WriteLine("nothing");
+                }
+            }
+
+            base.OnActivityResult(requestCode, resultCode, data);
         }
     }
 }

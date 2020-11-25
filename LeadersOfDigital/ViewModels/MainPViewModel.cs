@@ -25,6 +25,7 @@ using LeadersOfDigital.Definitions.VmLink;
 using Xamarin.Forms;
 using Xamarin.Forms.Internals;
 using FFImageLoading.Svg.Forms;
+using LeadersOfDigital.Services;
 
 namespace LeadersOfDigital.ViewModels
 {
@@ -35,6 +36,7 @@ namespace LeadersOfDigital.ViewModels
         private readonly ExtendedUserContext _extendedUserContext;
 
         private string _destination;
+        private string _searchText;
 
         public ICommand ZoomInCommand { get; }
 
@@ -50,6 +52,8 @@ namespace LeadersOfDigital.ViewModels
 
         public ICommand BecomeVolunteerCommand { get; }
 
+        public ICommand MicCommand { get; }
+
         public MainPViewModel(
             INavigationService navigationService,
             IDialogService dialogService,
@@ -57,7 +61,8 @@ namespace LeadersOfDigital.ViewModels
             IExceptionHandler exceptionHandler,
             IFacilitiesLogic facilitiesLogic,
             IGoogleMapsApiLogicService googleMapsApiLogicService,
-            ExtendedUserContext extendedUserContext)
+            ExtendedUserContext extendedUserContext,
+            ISpeechToTextService speechToTextService)
             : base(navigationService, dialogService, debuggerService, exceptionHandler)
         {
             _facilitiesLogic = facilitiesLogic;
@@ -129,6 +134,36 @@ namespace LeadersOfDigital.ViewModels
                     State = PageStateType.Default;
                 },
                 () => true);
+
+            MicCommand = BuildPageVmCommand(
+                async () =>
+                {
+                    if (!(await CrossPermissionsExtension.CheckAndRequestPermissionIfNeeded(
+                        new Permissions.BasePermission[]
+                        {
+                            new Permissions.Speech(),
+                            new Permissions.Microphone(),
+                        }))
+                        .All(x => x.Value == PermissionStatus.Granted))
+                    {
+                        DialogService.ShowPlatformShortAlert("Нет разрешений");
+                        return;
+                    }
+
+                    await ExceptionHandler.PerformCatchableTask(
+                        new ViewModelPerformableAction(
+                            async () =>
+                            {
+                                speechToTextService.StartSpeechToText();
+
+                                speechToTextService.SpeechRecognitionFinished += (sender, e) =>
+                                {
+                                    Console.WriteLine(e);
+
+                                    SearchText = e;
+                                };
+                            }));
+                });
 
             MainMap = new CustomMap
             {
@@ -304,6 +339,12 @@ namespace LeadersOfDigital.ViewModels
         {
             get => _destination;
             set => SetProperty(ref _destination, value);
+        }
+
+        public string SearchText
+        {
+            get => _searchText;
+            set => SetProperty(ref _searchText, value);
         }
 
         public override async Task OnAppearing()

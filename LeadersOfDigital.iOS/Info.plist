@@ -65,5 +65,9 @@
 	<string>UIStatusBarStyleLightContent</string>
 	<key>UIUserInterfaceStyle</key>
 	<string>Light</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>Приложение запрашивает доступ на использование микрофона</string>
+	<key>NSSpeechRecognitionUsageDescription</key>
+	<string>Приложение запрашивает доступ на запись голоса</string>
 </dict>
 </plist>

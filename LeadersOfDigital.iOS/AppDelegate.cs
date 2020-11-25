@@ -25,7 +25,9 @@ namespace LeadersOfDigital.iOS
 
             global::Xamarin.Forms.Forms.Init();
 
-            IocContainer.Init(new PlatformAlertMessageService());
+            IocContainer.Init(
+                new PlatformAlertMessageService(),
+                new PlatformSpeechToTextService());
 
             // Init nugets
             XamEffects.iOS.Effects.Init();

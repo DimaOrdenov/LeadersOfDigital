@@ -23,6 +23,8 @@ using System.Threading.Tasks;
 using System;
 using LeadersOfDigital.Views.Onboarding;
 using LeadersOfDigital.ViewModels.Onboarding;
+using LeadersOfDigital.Services;
+using LeadersOfDigital.DependencyServices;
 
 namespace LeadersOfDigital.Containers
 {
@@ -30,7 +32,9 @@ namespace LeadersOfDigital.Containers
     {
         public static IContainer Container { get; private set; }
 
-        public static void Init(IPlatformAlertMessageService platformAlertMessageServiceImplementation)
+        public static void Init(
+            IPlatformAlertMessageService platformAlertMessageServiceImplementation,
+            IPlatformSpeechToTextService platformSpeechToTextService)
         {
             ContainerBuilder builder = new ContainerBuilder();
 
@@ -41,7 +45,10 @@ namespace LeadersOfDigital.Containers
             builder.RegisterType<DebuggerService>().As<IDebuggerService>().SingleInstance();
             builder.RegisterType<ExceptionHandler>().As<IExceptionHandler>().SingleInstance();
             builder.RegisterType<ExtendedUserContext>().As<UserContext>().AsSelf().SingleInstance();
+            builder.RegisterType<SpeechToTextService>().As<ISpeechToTextService>().SingleInstance();
+
             builder.RegisterInstance(platformAlertMessageServiceImplementation).As<IPlatformAlertMessageService>().SingleInstance();
+            builder.RegisterInstance(platformSpeechToTextService).As<IPlatformSpeechToTextService>().SingleInstance();
 
             // BL
             var RC = new RestClient(Secrets.ApiUrl);

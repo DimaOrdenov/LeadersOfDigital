@@ -9,6 +9,7 @@
 	<uses-permission android:name="android.permission.WAKE_LOCK" />
 	<uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 	<uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+	<uses-permission android:name="android.permission.RECORD_AUDIO" />
 	<application android:theme="@style/MainTheme" android:icon="@mipmap/icon" android:label="Saferoute">
 		<meta-data android:name="com.google.android.geo.API_KEY" android:value="AIzaSyCPWkf92XksYyz9YGhdjmmfovPp7eV3xS4" />
 		<uses-library android:name="org.apache.http.legacy" android:required="false" />

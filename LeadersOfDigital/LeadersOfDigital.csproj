@@ -47,6 +47,8 @@
     <Folder Include="Views\Onboarding\" />
     <Folder Include="ViewModels\Onboarding\" />
     <Folder Include="Definitions\Enums\" />
+    <Folder Include="Services\" />
+    <Folder Include="DependencyServices\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\DataModels\DataModels.csproj" />
