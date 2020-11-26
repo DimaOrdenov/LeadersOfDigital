@@ -413,3 +413,5 @@ secrets.*.json
 
 # mono
 mono_crash.*
+
+Resource.designer.cs

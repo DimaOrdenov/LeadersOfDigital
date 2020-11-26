@@ -13,8 +13,8 @@ namespace LeadersOfDigital.Droid
 {
     [Activity(
         Label = "Saferoute",
-        Icon = "@mipmap/icon",
-        RoundIcon = "@mipmap/icon_round",
+        Icon = "@mipmap/ic_launcher",
+        RoundIcon = "@mipmap/ic_launcher_round",
         Theme = "@style/MainTheme",
         MainLauncher = false,
         ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation | ConfigChanges.UiMode | ConfigChanges.ScreenLayout | ConfigChanges.SmallestScreenSize,
