@@ -138,31 +138,46 @@ namespace LeadersOfDigital.ViewModels
             MicCommand = BuildPageVmCommand(
                 async () =>
                 {
-                    if (!(await CrossPermissionsExtension.CheckAndRequestPermissionIfNeeded(
-                        new Permissions.BasePermission[]
-                        {
+                    if (string.IsNullOrEmpty(SearchText))
+                    {
+                        if (!(await CrossPermissionsExtension.CheckAndRequestPermissionIfNeeded(
+                            new Permissions.BasePermission[]
+                            {
                             new Permissions.Speech(),
                             new Permissions.Microphone(),
-                        }))
-                        .All(x => x.Value == PermissionStatus.Granted))
-                    {
-                        DialogService.ShowPlatformShortAlert("Нет разрешений");
-                        return;
-                    }
+                            }))
+                            .All(x => x.Value == PermissionStatus.Granted))
+                        {
+                            DialogService.ShowPlatformShortAlert("Нет разрешений");
+                            return;
+                        }
 
-                    await ExceptionHandler.PerformCatchableTask(
-                        new ViewModelPerformableAction(
-                            async () =>
-                            {
-                                speechToTextService.StartSpeechToText();
-
-                                speechToTextService.SpeechRecognitionFinished += (sender, e) =>
+                        await ExceptionHandler.PerformCatchableTask(
+                            new ViewModelPerformableAction(
+                                async () =>
                                 {
-                                    Console.WriteLine(e);
+                                    speechToTextService.StartSpeechToText();
 
-                                    SearchText = e;
-                                };
-                            }));
+                                    speechToTextService.SpeechRecognitionFinished += (sender, e) =>
+                                    {
+                                        Console.WriteLine(e);
+
+                                        SearchText = e;
+                                    };
+                                }));
+                    }
+                    else
+                    {
+                        await TextToSpeech.SpeakAsync(
+                            _searchText,
+                            new SpeechOptions
+                            {
+                                Pitch = 0.5f,
+                            },
+                            CancellationToken);
+
+                        SearchText = null;
+                    }
                 });
 
             MainMap = new CustomMap
