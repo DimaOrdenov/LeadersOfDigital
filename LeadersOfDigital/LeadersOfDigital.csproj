@@ -49,6 +49,8 @@
     <Folder Include="Definitions\Enums\" />
     <Folder Include="Services\" />
     <Folder Include="DependencyServices\" />
+    <Folder Include="Views\MasterDetails\" />
+    <Folder Include="ViewModels\MasterDetails\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\DataModels\DataModels.csproj" />

@@ -54,6 +54,8 @@ namespace LeadersOfDigital.ViewModels
 
         public ICommand MicCommand { get; }
 
+        public ICommand BurgerMenuCommand { get; }
+
         public MainPViewModel(
             INavigationService navigationService,
             IDialogService dialogService,
@@ -178,6 +180,12 @@ namespace LeadersOfDigital.ViewModels
 
                         SearchText = null;
                     }
+                });
+
+            BurgerMenuCommand = BuildPageVmCommand(
+                async () =>
+                {
+                    NavigationService.PresentMasterDetailMasterPage();
                 });
 
             MainMap = new CustomMap

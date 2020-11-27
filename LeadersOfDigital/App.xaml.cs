@@ -1,6 +1,7 @@
 ﻿using Autofac;
 using LeadersOfDigital.Containers;
 using LeadersOfDigital.Views;
+using LeadersOfDigital.Views.MasterDetails;
 using LeadersOfDigital.Views.Onboarding;
 using NoTryCatch.Xamarin.Portable.Services;
 using Xamarin.Forms;
@@ -20,21 +21,23 @@ namespace LeadersOfDigital
         {
             INavigationService navigationService = IocContainer.Container.Resolve<INavigationService>();
 
-            if (App.Current.Properties.ContainsKey("IsFirstLaunch") &&
-                App.Current.Properties["IsFirstLaunch"] as bool? == false)
-            {
-                navigationService.SetRootPage<MainPage>();
-            }
-            else
-            {
-                if (!App.Current.Properties.ContainsKey("IsFirstLaunch"))
-                {
-                    App.Current.Properties.Add("IsFirstLaunch", true);
-                    await App.Current.SavePropertiesAsync();
-                }
+            navigationService.SetRootMasterDetailPage<MasterDetailsMainPage>();
 
-                navigationService.SetRootPage<OnboardingOnePage>();
-            }
+            //if (App.Current.Properties.ContainsKey("IsFirstLaunch") &&
+            //    App.Current.Properties["IsFirstLaunch"] as bool? == false)
+            //{
+            //    navigationService.SetRootMasterDetailPage<MasterDetailsMainPage>();
+            //}
+            //else
+            //{
+            //    if (!App.Current.Properties.ContainsKey("IsFirstLaunch"))
+            //    {
+            //        App.Current.Properties.Add("IsFirstLaunch", true);
+            //        await App.Current.SavePropertiesAsync();
+            //    }
+
+            //    navigationService.SetRootPage<OnboardingOnePage>();
+            //}
         }
 
         protected override void OnSleep()

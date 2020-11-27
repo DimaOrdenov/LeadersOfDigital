@@ -6,7 +6,6 @@ using NoTryCatch.Core.Services;
 using NoTryCatch.Xamarin.Portable.Services;
 using NoTryCatch.Xamarin.Portable.Services.PlatformServices;
 using RestSharp;
-using NoTryCatch.BL.Core;
 using LeadersOfDigital.Views.VolunteerAccount;
 using LeadersOfDigital.ViewModels.VolunteerAccount;
 using LeadersOfDigital.BusinessLayer;
@@ -17,14 +16,15 @@ using LeadersOfDigital.ViewModels.Map;
 using LeadersOfDigital.Views.Map;
 using System.Reflection;
 using NoTryCatch.Xamarin.Portable.ViewModels;
-using NoTryCatch.Xamarin.Definitions;
 using NoTryCatch.BL.Core.Exceptions;
-using System.Threading.Tasks;
 using System;
 using LeadersOfDigital.Views.Onboarding;
 using LeadersOfDigital.ViewModels.Onboarding;
 using LeadersOfDigital.Services;
 using LeadersOfDigital.DependencyServices;
+using LeadersOfDigital.Views.MasterDetails;
+using LeadersOfDigital.ViewModels.MasterDetails;
+using System.Collections.Generic;
 
 namespace LeadersOfDigital.Containers
 {
@@ -93,6 +93,21 @@ namespace LeadersOfDigital.Containers
             pageFactory.Configure<AddMarkerPage, AddMarkerViewModel>(() => Container.Resolve<AddMarkerViewModel>());
             pageFactory.Configure<OnboardingOnePage, OnboardingOneViewModel>(() => Container.Resolve<OnboardingOneViewModel>());
             pageFactory.Configure<OnboardingTwoPage, OnboardingTwoViewModel>(() => Container.Resolve<OnboardingTwoViewModel>());
+            pageFactory.Configure<MasterDetailsMainPageMaster, MasterDetailsMasterViewModel>(() => Container.Resolve<MasterDetailsMasterViewModel>());
+            pageFactory.ConfigureMasterDetail<MasterDetailsMainPage, MasterDetailsMainViewModel, MasterDetailsMainPageMaster>(
+                () => Container.Resolve<MasterDetailsMainViewModel>(),
+                new List<Type>
+                {
+                    typeof(MainPage),
+                    typeof(OnboardingOnePage),
+                    typeof(OnboardingTwoPage),
+                },
+                new List<string>
+                {
+                    "Main",
+                    "OnBoardingOne",
+                    "OnBoardingTwo",
+                });
         }
     }
 }
